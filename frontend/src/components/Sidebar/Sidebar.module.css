@@ -3,7 +3,6 @@
     overflow-y: hidden;
     display: flex;
     flex-direction: column;
-    /* height: 100vh; */
     background-color: var(--color-ligth-green);
     width: 40%;
     max-width: 350px;
@@ -12,6 +11,5 @@
 
 .chats {
     overflow-y: auto;
-    /* height: calc(100% - 80px); */
     flex: 1;
 }

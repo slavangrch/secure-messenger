@@ -8,10 +8,11 @@
     width: 80%;
     margin: 10px auto;
     display: block;
-    padding: 15px;
+    padding: 10px 15px;
     border: none;
-    background-color: (--color-white);
+    background-color: var(--color-white);
     border-radius: 15px;
+    font: inherit;
 }
 
 input:focus {
@@ -23,7 +24,7 @@ input:focus {
     height: 24px;
     position: absolute;
     top: 20px;
-    right: 45px;
+    right: 15%;
     color: var(--color-light-gray);
     cursor: pointer;
 }
