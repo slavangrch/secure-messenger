@@ -1,0 +1,39 @@
+.wrapper {
+    background-color: var(--color-white);
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* position: relative; */
+}
+
+.wrapper input {
+    width: 80%;
+    display: block;
+    /* margin: 0 auto; */
+    padding: 11px 20px ;
+    border: 1px solid var(--color-light-gray-border);
+    border-radius: 12px;
+    font: inherit;
+}
+
+.sendBtn {
+    background-color: var(--color-light-orange);
+    padding: 10px 13px;
+    color: var(--color-white);
+    cursor: pointer;
+    display: flex;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+.send {
+    width: 24px;
+    height: 24px;
+    /* margin-top: 3px; */
+    /* position: absolute;
+    top: 33px;
+    right: 100px; */
+
+}

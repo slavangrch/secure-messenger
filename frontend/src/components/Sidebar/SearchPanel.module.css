@@ -1,0 +1,29 @@
+.search {
+    position: relative;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.search input {
+    width: 80%;
+    margin: 10px auto;
+    display: block;
+    padding: 15px;
+    border: none;
+    background-color: (--color-white);
+    border-radius: 15px;
+}
+
+input:focus {
+    outline: none;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    color: var(--color-light-gray);
+    cursor: pointer;
+}

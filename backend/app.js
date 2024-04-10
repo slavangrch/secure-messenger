@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 app.use('/auth', authRoutes);
-// app.listen(3000);
+
 mongoose
   .connect(DB_URL)
   .then((result) => {
