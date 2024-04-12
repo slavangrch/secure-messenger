@@ -2,6 +2,8 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator/check');
 const jwt = require('jsonwebtoken');
+const SECRET_KEY =
+  '5227c42b3c78f653868cfd1b525b2a8d6f28e32bb8e1813c54ccc703b58bb9f3';
 
 exports.signup = async (req, res, next) => {
   try {
@@ -62,9 +64,16 @@ exports.login = async (req, res, next) => {
       throw error;
     }
 
-    //add token
+    const token = jwt.sign(
+      {
+        email: user[0].email,
+        userId: user[0]._id.toString(),
+      },
+      SECRET_KEY,
+      { expiresIn: '7d' }
+    );
 
-    res.status(200).json({ userId: user[0]._id });
+    res.status(200).json({ token: token, userId: user[0]._id });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
