@@ -10,7 +10,7 @@ router.post(
     body('email')
       .isEmail()
       .withMessage('Invalid email!')
-      .custom((value) => {
+      .custom((value, { req }) => {
         return User.findOne({ email: value }).then((user) => {
           if (user) {
             return Promise.reject('User with this email already exists!');

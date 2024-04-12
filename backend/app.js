@@ -9,6 +9,14 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message || 'An error occurred';
+  const data = error.data || [];
+  res.status(status).json({ message: message, data: data });
+});
+
 mongoose
   .connect(DB_URL)
   .then((result) => {
