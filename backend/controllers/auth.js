@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator/check');
+const jwt = require('jsonwebtoken');
 
 exports.signup = async (req, res, next) => {
   try {
@@ -22,9 +23,7 @@ exports.signup = async (req, res, next) => {
     if (password !== confirmedPassword) {
       const error = new Error('Passwords should match!');
       error.statusCode = 400;
-      error.data = errors.array();
       throw error;
-      // res.status(400).json({ error: 'Passwords should match!' });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -37,15 +36,41 @@ exports.signup = async (req, res, next) => {
 
     const result = await user.save();
     res.status(201).json({ result });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
     }
-    next(err);
+    next(error);
   }
 };
-exports.login = (req, res, next) => {
-  console.log('login contr');
+exports.login = async (req, res, next) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    const user = await User.find({ email: email });
+
+    if (!user[0]) {
+      const error = new Error("User with this email doesn't exists.");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const passwordIsEqual = await bcrypt.compare(password, user[0].password);
+    if (!passwordIsEqual) {
+      const error = new Error('Wrong password!');
+      error.statusCode = 401;
+      throw error;
+    }
+
+    //add token
+
+    res.status(200).json({ userId: user[0]._id });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
 };
 exports.logout = (req, res, next) => {
   console.log('logout contr');
