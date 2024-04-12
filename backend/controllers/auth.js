@@ -49,15 +49,15 @@ exports.login = async (req, res, next) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    const user = await User.find({ email: email });
+    const user = await User.findOne({ email: email });
 
-    if (!user[0]) {
+    if (!user) {
       const error = new Error("User with this email doesn't exists.");
       error.statusCode = 404;
       throw error;
     }
 
-    const passwordIsEqual = await bcrypt.compare(password, user[0].password);
+    const passwordIsEqual = await bcrypt.compare(password, user.password);
     if (!passwordIsEqual) {
       const error = new Error('Wrong password!');
       error.statusCode = 401;
@@ -66,14 +66,14 @@ exports.login = async (req, res, next) => {
 
     const token = jwt.sign(
       {
-        email: user[0].email,
-        userId: user[0]._id.toString(),
+        email: user.email,
+        userId: user._id.toString(),
       },
       SECRET_KEY,
       { expiresIn: '7d' }
     );
 
-    res.status(200).json({ token: token, userId: user[0]._id });
+    res.status(200).json({ token: token, userId: user._id });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -84,3 +84,5 @@ exports.login = async (req, res, next) => {
 exports.logout = (req, res, next) => {
   console.log('logout contr');
 };
+
+exports.SECRET_KEY = SECRET_KEY;
