@@ -4,7 +4,9 @@ const express = require('express');
 const authRoutes = require('./routes/auth');
 const mongoose = require('mongoose');
 const app = express();
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 
 mongoose
