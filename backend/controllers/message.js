@@ -28,7 +28,26 @@ exports.sendMessage = async (req, res, next) => {
     chat.messages.push(result._id);
     await chat.save();
 
-    res.status(200).json({ receiverId, message });
+    res.status(201).json({ newMessage });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.getMessages = async (req, res, next) => {
+  const senderId = req.userId;
+  const receiverId = req.params.id;
+  try {
+    const chat = await Chat.findOne({
+      members: { $all: [senderId, receiverId] },
+    }).populate('messages');
+    const messages = chat.messages;
+    // const messages = chat.messages.map((message) => message.message);
+
+    res.status(200).json({ chat: messages });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

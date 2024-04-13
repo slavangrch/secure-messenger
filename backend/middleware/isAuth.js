@@ -11,7 +11,6 @@ exports.isAuth = (req, res, next) => {
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, SECRET_KEY);
-    console.log(decodedToken);
   } catch (error) {
     error.statusCode = 500;
     throw error;

@@ -3,6 +3,7 @@ const DB_URL =
 const express = require('express');
 const authRoutes = require('./routes/auth');
 const messageRoutes = require('./routes/message');
+const userRoutes = require('./routes/user');
 const { isAuth } = require('./middleware/isAuth');
 const mongoose = require('mongoose');
 const app = express();
@@ -21,6 +22,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 app.use('/message', isAuth, messageRoutes);
+app.use('/users', isAuth, userRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);

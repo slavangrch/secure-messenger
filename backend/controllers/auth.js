@@ -19,8 +19,8 @@ exports.signup = async (req, res, next) => {
     const password = req.body.password;
     const email = req.body.email;
     const confirmedPassword = req.body.confirmedPassword;
-    const dafaultImageURL =
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNVi9cbmMkUabLiF_3kfI94qngwPIM4gnrztEUv6Hopw&s';
+    // const dafaultImageURL =
+    //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNVi9cbmMkUabLiF_3kfI94qngwPIM4gnrztEUv6Hopw&s';
 
     if (password !== confirmedPassword) {
       const error = new Error('Passwords should match!');
@@ -33,7 +33,7 @@ exports.signup = async (req, res, next) => {
       username,
       password: hashedPassword,
       email,
-      imageURL: dafaultImageURL,
+      // imageURL: dafaultImageURL,
     });
 
     const result = await user.save();
