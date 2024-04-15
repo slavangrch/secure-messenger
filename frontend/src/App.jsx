@@ -6,9 +6,9 @@ import Signup from './pages/Signup';
 function App() {
   return (
     <>
-      <Main></Main>
+      {/* <Main></Main> */}
       {/* <Login></Login> */}
-      {/* <Signup></Signup> */}
+      <Signup></Signup>
     </>
   );
 }

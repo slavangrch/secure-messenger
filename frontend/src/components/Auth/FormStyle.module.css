@@ -26,6 +26,10 @@ h1 {
     font: inherit;
 }
 
+.inputField input.invalid {
+    border: 1px solid red;
+}
+
 .btn {
     width: 100%;
     padding: 7px;
