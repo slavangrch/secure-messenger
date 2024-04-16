@@ -14,12 +14,12 @@ export function validateEmail(email) {
 export function validatePassword(password, corfirmedPassword) {
   if (!password) {
     return false;
-  } else if (!corfirmedPassword) {
+  } else if (password.length < 8) {
+    return false;
+  } else if (corfirmedPassword) {
     if (password !== corfirmedPassword) {
       return false;
     }
-  } else if (password.length < 8) {
-    return false;
   }
   return true;
 }

@@ -1,36 +1,11 @@
 // import { BsSlashSquare } from 'react-icons/bs';
 import classes from '../Auth/FormStyle.module.css';
-import { validateEmail, validatePassword } from '../../utils/validateInput';
-import { useState } from 'react';
+import { Link, Form, useActionData } from 'react-router-dom';
+
 export default function SignupForm() {
-  const [inputIsInvalid, setInputIsInvalid] = useState({
-    email: false,
-    password: false,
-  });
-  function handleSubmit(event) {
-    event.preventDefault();
-    const fd = new FormData(event.target);
-    const data = Object.fromEntries(fd.entries());
-
-    const emailIsValid = validateEmail(data.email);
-    const passwordIsValid = validatePassword(
-      data.password,
-      data['confirmed-password']
-    );
-
-    if (!emailIsValid || !passwordIsValid) {
-      setInputIsInvalid((prevState) => ({
-        email: !emailIsValid,
-        password: !passwordIsValid,
-      }));
-      return;
-    }
-
-    // Post data
-    console.log(data);
-  }
+  const data = useActionData();
   return (
-    <form className={classes.form} onSubmit={handleSubmit}>
+    <Form method="post" action="/auth/signup" className={classes.form}>
       <h1>Sign up</h1>
       <div className={classes.inputField}>
         <label htmlFor="email">Email</label>
@@ -38,7 +13,7 @@ export default function SignupForm() {
           type="text"
           name="email"
           id="email"
-          className={inputIsInvalid.email ? classes.invalid : ''}
+          className={data && !data.emailIsValid ? classes.invalid : ''}
         />
       </div>
       <div className={classes.inputField}>
@@ -47,7 +22,7 @@ export default function SignupForm() {
           type="text"
           name="password"
           id="password"
-          className={inputIsInvalid.password ? classes.invalid : ''}
+          className={data && !data.passwordIsValid ? classes.invalid : ''}
         />
       </div>
       <div className={classes.inputField}>
@@ -56,7 +31,7 @@ export default function SignupForm() {
           type="text"
           name="confirmed-password"
           id="password"
-          className={inputIsInvalid.password ? classes.invalid : ''}
+          className={data && !data.passwordIsValid ? classes.invalid : ''}
         />
       </div>
       <button className={classes.btn}>Sign up</button>
@@ -65,8 +40,8 @@ export default function SignupForm() {
         <p>or</p>
       </div>
       <p>
-        Already have an account? <a href="">Login</a>
+        Already have an account? <Link to="/auth?mode=login">Login</Link>
       </p>
-    </form>
+    </Form>
   );
 }

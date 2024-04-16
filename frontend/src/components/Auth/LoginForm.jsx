@@ -1,34 +1,10 @@
 import { BsSlashSquare } from 'react-icons/bs';
 import classes from './FormStyle.module.css';
-import { validateEmail, validatePassword } from '../../utils/validateInput';
-import { useState } from 'react';
+import { Link, Form, useActionData } from 'react-router-dom';
 export default function LoginForm() {
-  const [inputIsInvalid, setInputIsInvalid] = useState({
-    email: false,
-    password: false,
-  });
-  function handleSubmit(event) {
-    event.preventDefault();
-    const fd = new FormData(event.target);
-    const data = Object.fromEntries(fd.entries());
-
-    const emailIsValid = validateEmail(data.email);
-    const passwordIsValid = validatePassword(data.password, null);
-
-    if (!emailIsValid || !passwordIsValid) {
-      setInputIsInvalid((prevState) => ({
-        email: !emailIsValid,
-        password: !passwordIsValid,
-      }));
-      return;
-    }
-
-    // Post data
-    console.log(data);
-  }
-
+  const data = useActionData();
   return (
-    <form className={classes.form} onSubmit={handleSubmit}>
+    <Form method="post" action="/auth/login" className={classes.form}>
       <h1>Login</h1>
       <div className={classes.inputField}>
         <label htmlFor="email">Email</label>
@@ -36,7 +12,7 @@ export default function LoginForm() {
           type="text"
           name="email"
           id="email"
-          className={inputIsInvalid.email ? classes.invalid : ''}
+          className={data && !data.emailIsValid ? classes.invalid : ''}
         />
       </div>
       <div className={classes.inputField}>
@@ -45,7 +21,7 @@ export default function LoginForm() {
           type="text"
           name="password"
           id="password"
-          className={inputIsInvalid.password ? classes.invalid : ''}
+          className={data && !data.passwordIsValid ? classes.invalid : ''}
         />
       </div>
       <button className={classes.btn}>Login</button>
@@ -54,8 +30,9 @@ export default function LoginForm() {
         <p>or</p>
       </div>
       <p>
-        Not registered yet? <a href="">Create an account</a>
+        Not registered yet?{' '}
+        <Link to="/auth?mode=signup">Create an account</Link>
       </p>
-    </form>
+    </Form>
   );
 }
