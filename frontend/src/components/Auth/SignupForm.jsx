@@ -17,6 +17,15 @@ export default function SignupForm() {
         />
       </div>
       <div className={classes.inputField}>
+        <label htmlFor="username">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          className={data && !data.usernameIsValid ? classes.invalid : ''}
+        />
+      </div>
+      <div className={classes.inputField}>
         <label htmlFor="password">Password</label>
         <input
           type="text"
@@ -30,7 +39,7 @@ export default function SignupForm() {
         <input
           type="text"
           name="confirmed-password"
-          id="password"
+          id="confirm-password"
           className={data && !data.passwordIsValid ? classes.invalid : ''}
         />
       </div>
@@ -40,7 +49,7 @@ export default function SignupForm() {
         <p>or</p>
       </div>
       <p>
-        Already have an account? <Link to="/auth?mode=login">Login</Link>
+        Already have an account? <Link to="/auth/login">Login</Link>
       </p>
     </Form>
   );

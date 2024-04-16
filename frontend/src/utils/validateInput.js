@@ -23,3 +23,10 @@ export function validatePassword(password, corfirmedPassword) {
   }
   return true;
 }
+
+export function validateUsername(username) {
+  if (!username.trim()) {
+    return false;
+  }
+  return true;
+}

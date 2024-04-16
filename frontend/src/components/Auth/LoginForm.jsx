@@ -30,8 +30,7 @@ export default function LoginForm() {
         <p>or</p>
       </div>
       <p>
-        Not registered yet?{' '}
-        <Link to="/auth?mode=signup">Create an account</Link>
+        Not registered yet? <Link to="/auth/signup">Create an account</Link>
       </p>
     </Form>
   );

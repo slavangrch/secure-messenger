@@ -11,16 +11,22 @@ export default function LoginPage() {
 
 export async function action({ request }) {
   const data = await request.formData();
-  const authData = {
+  const submitData = {
     email: data.get('email'),
     password: data.get('password'),
   };
 
-  const emailIsValid = validateEmail(authData.email);
-  const passwordIsValid = validatePassword(authData.password, null);
-  console.log(authData);
+  const emailIsValid = validateEmail(submitData.email);
+  const passwordIsValid = validatePassword(submitData.password, null);
 
   if (!emailIsValid || !passwordIsValid) {
     return { emailIsValid, passwordIsValid };
   }
+  const response = await fetch('http://localhost:3000/auth/login', {
+    method: request.method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(submitData),
+  });
+  console.log(response);
+  return response;
 }

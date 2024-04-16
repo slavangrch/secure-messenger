@@ -27,7 +27,7 @@ h1 {
 }
 
 .inputField input.invalid {
-    border: 1px solid red;
+    border: 1px solid rgb(168, 67, 67);
 }
 
 .btn {
