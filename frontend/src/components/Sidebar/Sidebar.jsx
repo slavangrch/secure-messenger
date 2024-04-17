@@ -5,16 +5,21 @@ import UserChat from './UserChat';
 import { useState } from 'react';
 import { getToken } from '../../utils/localStorageManipulation';
 import { useLoaderData } from 'react-router-dom';
+import { useContext } from 'react';
+import { UsersContext } from '../../store/users-context';
 
 export default function Sidebar() {
-  const sidebarUsers = useLoaderData('main');
-  console.log(sidebarUsers);
-
+  const ctx = useContext(UsersContext);
+  // const sidebarUsers = useLoaderData('main');
+  // const [activeChat, setActiveChat] = useState('');
+  // function selectChatHandler(id) {
+  //   setActiveChat(id);
+  // }
   return (
     <div className={classes.sidebarContainer}>
       <SearchPanel></SearchPanel>
       <div className={classes.chats}>
-        {sidebarUsers.users.map((user) => (
+        {ctx.sidebarUsers.users.map((user) => (
           <UserChat key={user._id} user={user}></UserChat>
         ))}
       </div>

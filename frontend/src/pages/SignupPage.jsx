@@ -45,6 +45,5 @@ export async function action({ request }) {
     // throw json({ message: response.message }, { status: 500 });
     return response;
   }
-  console.log(response);
   return redirect('/auth/login');
 }

@@ -2,7 +2,7 @@ import LoginForm from '../components/Auth/LoginForm';
 import classes from './AuthPage.module.css';
 import { validateEmail, validatePassword } from '../utils/validateInput';
 import { storeData } from '../utils/localStorageManipulation';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 export default function LoginPage() {
   return (
     <div className={classes.authPage}>
@@ -12,6 +12,7 @@ export default function LoginPage() {
 }
 
 export async function action({ request }) {
+  // const navigate = useNavigate();
   const data = await request.formData();
   const submitData = {
     email: data.get('email'),
@@ -40,7 +41,6 @@ export async function action({ request }) {
   const { userId, token } = resultData;
   console.log(userId, token);
   storeData(userId, token);
-  console.log(response);
-
+  // navigate('/user');
   return redirect('/user');
 }

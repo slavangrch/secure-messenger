@@ -22,7 +22,7 @@
     transition: background-color 0.2s;
 }
 
-.userChatContainer.active {
+.selected {
     background-color: rgba(149, 187, 183, 0.309);
     transition: background-color 0.2s;
     border-radius: 7px;
