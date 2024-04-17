@@ -18,7 +18,6 @@ export default function MainChat() {
       );
       const messages = await response.json();
       setMessages(messages.chat);
-      console.log(messages.chat);
     }
     getMessages();
   }, [ctx, token]);
@@ -37,6 +36,8 @@ export default function MainChat() {
           Send message to start chatting.
         </p>
       )}
+
+      <InputMessage></InputMessage>
     </div>
   );
 }
