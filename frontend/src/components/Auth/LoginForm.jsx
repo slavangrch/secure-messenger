@@ -1,11 +1,17 @@
 import { BsSlashSquare } from 'react-icons/bs';
 import classes from './FormStyle.module.css';
-import { Link, Form, useActionData } from 'react-router-dom';
+import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
 export default function LoginForm() {
   const data = useActionData();
+  const navigation = useNavigation;
+  const isSubmitting = navigation.state === 'submitting';
+  console.log(data);
   return (
     <Form method="post" action="/auth/login" className={classes.form}>
       <h1>Login</h1>
+      <p className={classes.backendError}>
+        {data && data.message ? data.message : null}
+      </p>
       <div className={classes.inputField}>
         <label htmlFor="email">Email</label>
         <input
@@ -24,7 +30,9 @@ export default function LoginForm() {
           className={data && !data.passwordIsValid ? classes.invalid : ''}
         />
       </div>
-      <button className={classes.btn}>Login</button>
+      <button disabled={isSubmitting} className={classes.btn}>
+        {isSubmitting ? 'Submitting...' : 'Login'}
+      </button>
       <div className={classes.lineContainer}>
         <div className={classes.line}></div>
         <p>or</p>

@@ -5,6 +5,7 @@ import {
   validatePassword,
   validateUsername,
 } from '../utils/validateInput';
+import { json, redirect } from 'react-router-dom';
 export default function SignupPage() {
   return (
     <div className={classes.authPage}>
@@ -38,6 +39,12 @@ export async function action({ request }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(submitData),
   });
+
+  if (!response.ok) {
+    console.log(response);
+    // throw json({ message: response.message }, { status: 500 });
+    return response;
+  }
   console.log(response);
-  return response;
+  return redirect('/auth/login');
 }

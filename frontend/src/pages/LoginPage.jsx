@@ -1,6 +1,8 @@
 import LoginForm from '../components/Auth/LoginForm';
 import classes from './AuthPage.module.css';
 import { validateEmail, validatePassword } from '../utils/validateInput';
+import { storeData } from '../utils/localStorageManipulation';
+import { redirect } from 'react-router-dom';
 export default function LoginPage() {
   return (
     <div className={classes.authPage}>
@@ -27,6 +29,18 @@ export async function action({ request }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(submitData),
   });
+
+  if (!response.ok) {
+    console.log(response);
+    // throw json({ message: response.message }, { status: 500 });
+    return response;
+  }
+
+  const resultData = await response.json();
+  const { userId, token } = resultData;
+  console.log(userId, token);
+  storeData(userId, token);
   console.log(response);
-  return response;
+
+  return redirect('/user');
 }

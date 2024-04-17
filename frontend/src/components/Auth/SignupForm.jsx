@@ -1,12 +1,19 @@
 // import { BsSlashSquare } from 'react-icons/bs';
 import classes from '../Auth/FormStyle.module.css';
-import { Link, Form, useActionData } from 'react-router-dom';
+import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
 
 export default function SignupForm() {
   const data = useActionData();
+  const navigation = useNavigation;
+  const isSubmitting = navigation.state === 'submitting';
+  console.log(data);
   return (
     <Form method="post" action="/auth/signup" className={classes.form}>
       <h1>Sign up</h1>
+      <p className={classes.backendError}>
+        {data && data.data ? data.data.map((error) => error.msg) : null}
+      </p>
+
       <div className={classes.inputField}>
         <label htmlFor="email">Email</label>
         <input
@@ -43,7 +50,9 @@ export default function SignupForm() {
           className={data && !data.passwordIsValid ? classes.invalid : ''}
         />
       </div>
-      <button className={classes.btn}>Sign up</button>
+      <button disabled={isSubmitting} className={classes.btn}>
+        {isSubmitting ? 'Submitting...' : 'Sign up'}
+      </button>
       <div className={classes.lineContainer}>
         <div className={classes.line}></div>
         <p>or</p>
