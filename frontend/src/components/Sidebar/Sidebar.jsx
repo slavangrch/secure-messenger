@@ -10,11 +10,6 @@ import { UsersContext } from '../../store/users-context';
 
 export default function Sidebar() {
   const ctx = useContext(UsersContext);
-  // const sidebarUsers = useLoaderData('main');
-  // const [activeChat, setActiveChat] = useState('');
-  // function selectChatHandler(id) {
-  //   setActiveChat(id);
-  // }
   return (
     <div className={classes.sidebarContainer}>
       <SearchPanel></SearchPanel>

@@ -1,6 +1,7 @@
 .mainPage {
     display: flex;
     flex-direction: column;
+    /* flex-grow: 1; */
     width: 100%;
     height: 100vh;
     overflow: hidden;
@@ -15,4 +16,11 @@
     border: 5px solid var(--color-ligth-border);
     padding: 10px; 
     flex: 1;
+}
+
+.fallbackText {
+    color: black;
+    text-align: center;
+    padding-top: 20px
+
 }

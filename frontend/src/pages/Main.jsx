@@ -8,13 +8,13 @@ import { useState } from 'react';
 
 export default function Main() {
   const sidebarUsers = useLoaderData();
-  const [activeChat, setActiveChat] = useState('');
-  function selectChatHandler(id) {
-    setActiveChat(id);
+  const [activeChat, setActiveChat] = useState({});
+  function selectChatHandler(user) {
+    setActiveChat(user);
   }
   const ctx = {
     sidebarUsers: sidebarUsers,
-    activeUserId: activeChat,
+    activeUser: activeChat,
     selectChatHandler: selectChatHandler,
   };
   return (

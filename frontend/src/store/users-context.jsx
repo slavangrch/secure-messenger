@@ -2,6 +2,6 @@ import { createContext } from 'react';
 
 export const UsersContext = createContext({
   sidebarUsers: [],
-  activeUseIid: '',
+  activeUser: {},
   selectChatHandler: () => {},
 });
