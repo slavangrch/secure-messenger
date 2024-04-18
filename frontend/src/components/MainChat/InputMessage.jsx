@@ -23,7 +23,7 @@ export default function InputMessage() {
       }
     );
     const answer = await response.json();
-    console.log(answer);
+    setMessage('');
   }
   return (
     <>

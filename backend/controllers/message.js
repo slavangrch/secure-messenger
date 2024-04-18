@@ -44,8 +44,12 @@ exports.getMessages = async (req, res, next) => {
     const chat = await Chat.findOne({
       members: { $all: [senderId, receiverId] },
     }).populate('messages');
+    // if (!chat) {
+    //   const error = new Error('No messages found!');
+    //   error.statusCode = 404;
+    //   throw error;
+    // }
     const messages = chat.messages;
-    // const messages = chat.messages.map((message) => message.message);
 
     res.status(200).json({ chat: messages });
   } catch (error) {

@@ -18,12 +18,12 @@
 }
 
 .userChatContainer:hover {
-    background-color: rgba(149, 187, 183, 0.309);
+    background-color: var(--color-selected-green);
     transition: background-color 0.2s;
 }
 
 .selected {
-    background-color: rgba(149, 187, 183, 0.309);
+    background-color: var(--color-selected-green);
     transition: background-color 0.2s;
     border-radius: 7px;
     border-left: 5px solid var(--color-light-orange);

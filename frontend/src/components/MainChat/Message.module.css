@@ -17,7 +17,8 @@
 }
 
 .messageInfo {
-
+    display: flex;
+    flex-direction: column;
 }
 
 .name {
@@ -25,9 +26,26 @@
 }
 
 .message {
-
+    background-color: var(--color-ligth-green);
+    padding: 8px 20px;
+    border-radius: 12px;
+    border-top-left-radius: 0;
+    max-width: 400px;
+    overflow-wrap: anywhere;
+    line-height: 150%;
 }
 
 .messageWrapper.sender {
     flex-direction: row-reverse;
+}
+
+.messageWrapper.sender .messageInfo {
+   align-items: end;
+}
+
+.messageWrapper.sender .message {
+    background-color: var(--color-selected-green);
+    border-radius: 10px;
+    border-top-right-radius: 0;
+
 }

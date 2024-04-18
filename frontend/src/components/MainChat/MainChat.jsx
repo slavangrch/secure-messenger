@@ -12,12 +12,14 @@ export default function MainChat() {
   const token = getToken();
   useEffect(() => {
     async function getMessages() {
-      const response = await fetch(
-        `http://localhost:3000/message/${ctx.activeUser._id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const messages = await response.json();
-      setMessages(messages.chat);
+      if (ctx.activeUser._id) {
+        const response = await fetch(
+          `http://localhost:3000/message/${ctx.activeUser._id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const messages = await response.json();
+        setMessages(messages.chat);
+      }
     }
     getMessages();
   }, [ctx, token]);
