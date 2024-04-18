@@ -25,21 +25,27 @@ export default function MainChat() {
   }, [ctx, token]);
   return (
     <div className={classes.mainPage}>
-      <ChatInfo></ChatInfo>
-
-      {messages && messages.length > 0 ? (
-        <div className={classes.messages}>
-          {messages.map((message) => (
-            <Message key={message._id} message={message}></Message>
-          ))}
-        </div>
-      ) : (
+      {!ctx.activeUser._id ? (
         <p className={`${classes.messages} ${classes.fallbackText}`}>
-          Send message to start chatting.
+          Select chat to start chatting
         </p>
+      ) : (
+        <>
+          <ChatInfo></ChatInfo>
+          {messages && messages.length > 0 ? (
+            <div className={classes.messages}>
+              {messages.map((message) => (
+                <Message key={message._id} message={message}></Message>
+              ))}
+            </div>
+          ) : (
+            <p className={`${classes.messages} ${classes.fallbackText}`}>
+              Send message to start chatting
+            </p>
+          )}
+          <InputMessage></InputMessage>
+        </>
       )}
-
-      <InputMessage></InputMessage>
     </div>
   );
 }

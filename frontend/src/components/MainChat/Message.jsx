@@ -3,10 +3,12 @@ import ProfileImage from '../../images/profile-image.png';
 import classes from './Message.module.css';
 import { UsersContext } from '../../store/users-context';
 import { getToken, getUserId } from '../../utils/localStorageManipulation';
+import formatTime from '../../utils/timeFormatter';
 export default function Message({ message }) {
   const ctx = useContext(UsersContext);
   const receiver = ctx.activeUser;
-  // console.log(message);
+  const time = formatTime(message.createdAt);
+  console.log(message);
   const messageFromOwner = message.receiverId === receiver._id;
 
   return (
@@ -19,9 +21,12 @@ export default function Message({ message }) {
     >
       <img src={ProfileImage} alt="" />
       <div className={classes.messageInfo}>
-        <p className={classes.name}>
-          {messageFromOwner ? 'You' : receiver.username}
-        </p>
+        <div className={classes.wrapperNameDate}>
+          <p className={classes.name}>
+            {messageFromOwner ? 'You' : receiver.username}
+          </p>
+          <p className={classes.time}>{time}</p>
+        </div>
         <p className={classes.message}>{message.message}</p>
       </div>
     </div>

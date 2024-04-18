@@ -47,5 +47,18 @@
     background-color: var(--color-selected-green);
     border-radius: 10px;
     border-top-right-radius: 0;
+}
 
+.wrapperNameDate {
+    display: flex;
+    gap: 8px;
+}
+
+.messageWrapper.sender .wrapperNameDate {
+    flex-direction: row-reverse;
+}
+
+.time {
+    font-size: 9px;
+    color: var(--color-light-gray);
 }
