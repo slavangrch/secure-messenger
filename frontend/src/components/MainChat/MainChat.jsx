@@ -2,12 +2,13 @@ import ChatInfo from './ChatInfo';
 import classes from '../MainChat/MainChat.module.css';
 import Message from './Message';
 import InputMessage from './InputMessage';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { UsersContext } from '../../store/users-context';
 import { getToken } from '../../utils/localStorageManipulation';
 
 export default function MainChat() {
   const ctx = useContext(UsersContext);
+  const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const token = getToken();
   useEffect(() => {
@@ -22,7 +23,14 @@ export default function MainChat() {
       }
     }
     getMessages();
-  }, [ctx, token]);
+  }, [ctx.activeUser, token]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+    }
+  }, [messages, ctx.activeUser]);
+
   return (
     <div className={classes.mainPage}>
       {!ctx.activeUser._id ? (
@@ -37,12 +45,14 @@ export default function MainChat() {
               {messages.map((message) => (
                 <Message key={message._id} message={message}></Message>
               ))}
+              <div ref={messagesEndRef} />
             </div>
           ) : (
             <p className={`${classes.messages} ${classes.fallbackText}`}>
               Send message to start chatting
             </p>
           )}
+
           <InputMessage></InputMessage>
         </>
       )}

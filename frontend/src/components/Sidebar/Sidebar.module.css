@@ -13,3 +13,14 @@
     overflow-y: auto;
     flex: 1;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.chats::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.chats {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

@@ -8,7 +8,6 @@ export default function Message({ message }) {
   const ctx = useContext(UsersContext);
   const receiver = ctx.activeUser;
   const time = formatTime(message.createdAt);
-  console.log(message);
   const messageFromOwner = message.receiverId === receiver._id;
 
   return (
