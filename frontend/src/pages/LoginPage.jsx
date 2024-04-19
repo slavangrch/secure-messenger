@@ -3,6 +3,7 @@ import classes from './AuthPage.module.css';
 import { validateEmail, validatePassword } from '../utils/validateInput';
 import { storeData } from '../utils/localStorageManipulation';
 import { redirect, useNavigate } from 'react-router-dom';
+
 export default function LoginPage() {
   return (
     <div className={classes.authPage}>
@@ -39,8 +40,9 @@ export async function action({ request }) {
 
   const resultData = await response.json();
   const { userId, token } = resultData;
-  console.log(userId, token);
   storeData(userId, token);
-  localStorage.setItem('tokenExpiration', 7 * 24 * 60 * 60 * 1000);
+  const expiration = new Date();
+  expiration.setTime(expiration.getTime() + 7 * 24 * 60 * 60 * 1000);
+  localStorage.setItem('tokenExpiration', expiration.toISOString());
   return redirect('/user');
 }

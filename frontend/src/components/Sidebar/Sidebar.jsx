@@ -14,12 +14,12 @@ export default function Sidebar() {
   const [users, setUsers] = useState(ctx.sidebarUsers.users);
 
   function findChats() {
-    if (!search) {
+    if (!search || !search.trim()) {
       setUsers(ctx.sidebarUsers.users);
       return;
     }
     const filteredUsers = users.filter((user) =>
-      user.username.startsWith(search)
+      user.username.toLowerCase().startsWith(search.toLowerCase())
     );
     setUsers(filteredUsers);
   }
@@ -31,8 +31,11 @@ export default function Sidebar() {
         findChats={findChats}
       ></SearchPanel>
       <div className={classes.chats}>
-        {users &&
-          users.map((user) => <UserChat key={user._id} user={user}></UserChat>)}
+        {users && users.length > 0 ? (
+          users.map((user) => <UserChat key={user._id} user={user}></UserChat>)
+        ) : (
+          <p className={classes.fallbackText}>No user found</p>
+        )}
       </div>
     </div>
   );

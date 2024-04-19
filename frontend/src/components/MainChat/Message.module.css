@@ -21,9 +21,9 @@
     flex-direction: column;
 }
 
-.name {
+/* .name {
 
-}
+} */
 
 .message {
     background-color: var(--color-ligth-green);
@@ -32,6 +32,7 @@
     border-top-left-radius: 0;
     max-width: 400px;
     overflow-wrap: anywhere;
+    word-break: break-all;
     line-height: 150%;
 }
 

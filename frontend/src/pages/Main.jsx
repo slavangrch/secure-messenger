@@ -7,8 +7,9 @@ import {
 } from '../utils/localStorageManipulation';
 import { UsersContext } from '../store/users-context';
 import { redirect, useLoaderData } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SettingsBar from '../components/SettingsBar/SettingsBar';
+import SocketContextProvider from '../store/socket-context';
 
 export default function Main() {
   const sidebarUsers = useLoaderData();
@@ -23,11 +24,13 @@ export default function Main() {
   };
   return (
     <UsersContext.Provider value={ctx}>
-      <div className={classes.container}>
-        <SettingsBar></SettingsBar>
-        <Sidebar></Sidebar>
-        <MainChat></MainChat>
-      </div>
+      <SocketContextProvider>
+        <div className={classes.container}>
+          <SettingsBar></SettingsBar>
+          <Sidebar></Sidebar>
+          <MainChat></MainChat>
+        </div>
+      </SocketContextProvider>
     </UsersContext.Provider>
   );
 }
@@ -36,7 +39,6 @@ export async function loader({ request }) {
   const token = getToken();
   if (token === 'Token is expired') {
     deleteDataFromStorage();
-
     return redirect('/auth/login');
   }
   if (!token) {

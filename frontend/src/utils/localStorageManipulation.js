@@ -28,7 +28,7 @@ export function getUserId() {
 
 export function checkAuth() {
   const token = getToken();
-  if (!token) {
+  if (!token || token === 'Token is expired') {
     return redirect('/auth/login');
   }
   return null;

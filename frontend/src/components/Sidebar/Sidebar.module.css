@@ -24,3 +24,8 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+.fallbackText {
+    color: black;
+    text-align: center;
+}

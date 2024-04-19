@@ -5,7 +5,6 @@ export default function LoginForm() {
   const data = useActionData();
   const navigation = useNavigation;
   const isSubmitting = navigation.state === 'submitting';
-  console.log(data);
   return (
     <Form method="post" action="/auth/login" className={classes.form}>
       <h1>Login</h1>
