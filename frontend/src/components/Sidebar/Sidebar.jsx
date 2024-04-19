@@ -12,7 +12,7 @@ export default function Sidebar() {
   const ctx = useContext(UsersContext);
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState(ctx.sidebarUsers.users);
-  console.log(search);
+
   function findChats() {
     if (!search) {
       setUsers(ctx.sidebarUsers.users);

@@ -41,6 +41,6 @@ export async function action({ request }) {
   const { userId, token } = resultData;
   console.log(userId, token);
   storeData(userId, token);
-  // navigate('/user');
+  localStorage.setItem('tokenExpiration', 7 * 24 * 60 * 60 * 1000);
   return redirect('/user');
 }

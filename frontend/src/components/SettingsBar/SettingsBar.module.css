@@ -1,0 +1,15 @@
+.main {
+    height: 100hv;
+    background-color: var(--color-dark-green);
+    width: 80px;
+    display: flex;
+    /* align-items: space-between; */
+    justify-content: center;
+}
+
+.icon {
+    margin-top: auto;
+    margin-bottom: 30px;
+    cursor: pointer;
+    font-size: 20px;
+}
