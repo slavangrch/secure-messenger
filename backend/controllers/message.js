@@ -1,5 +1,7 @@
 const Chat = require('../models/chat');
 const Message = require('../models/message');
+const { getSocketId } = require('../socket/socket');
+const io = require('../socket/socketHelper');
 
 exports.sendMessage = async (req, res, next) => {
   try {
@@ -25,8 +27,16 @@ exports.sendMessage = async (req, res, next) => {
     });
 
     const result = await newMessage.save();
+
     chat.messages.push(result._id);
     await chat.save();
+
+    const receiverSocket = getSocketId(receiverId);
+    const senderSocket = getSocketId(senderId);
+    if (receiverSocket && senderSocket) {
+      io.getIo().to(receiverSocket).emit('new-message', newMessage);
+      io.getIo().to(senderSocket).emit('new-message', newMessage);
+    }
 
     res.status(201).json({ newMessage });
   } catch (error) {
@@ -44,11 +54,11 @@ exports.getMessages = async (req, res, next) => {
     const chat = await Chat.findOne({
       members: { $all: [senderId, receiverId] },
     }).populate('messages');
-    // if (!chat) {
-    //   const error = new Error('No messages found!');
-    //   error.statusCode = 404;
-    //   throw error;
-    // }
+    if (!chat || !chat.messages) {
+      const error = new Error('No messages found!');
+      error.statusCode = 404;
+      throw error;
+    }
     const messages = chat.messages;
 
     res.status(200).json({ chat: messages });

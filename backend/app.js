@@ -9,7 +9,7 @@ const { isAuth } = require('./middleware/isAuth');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
-const socketManager = require('./socket/socket');
+const { socketManager } = require('./socket/socket');
 
 app.use(bodyParser.json());
 app.use(cors({ origin: 'http://localhost:5173' }));

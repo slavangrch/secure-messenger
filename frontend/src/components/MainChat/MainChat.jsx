@@ -5,9 +5,11 @@ import InputMessage from './InputMessage';
 import { useContext, useEffect, useState, useRef } from 'react';
 import { UsersContext } from '../../store/users-context';
 import { getToken } from '../../utils/localStorageManipulation';
+import { SocketContext } from '../../store/socket-context';
 
 export default function MainChat() {
   const ctx = useContext(UsersContext);
+  const { socket } = useContext(SocketContext);
   const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const token = getToken();
@@ -24,6 +26,18 @@ export default function MainChat() {
     }
     getMessages();
   }, [ctx.activeUser, token]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('new-message', (message) => {
+        console.log('listener');
+        setMessages((prevMessagges) => {
+          return [...prevMessagges, message];
+        });
+      });
+    }
+    return () => socket?.off('new-message');
+  }, [socket, messages, setMessages]);
 
   useEffect(() => {
     if (messagesEndRef.current) {

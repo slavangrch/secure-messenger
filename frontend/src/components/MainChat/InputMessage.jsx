@@ -9,8 +9,6 @@ export default function InputMessage() {
   const [message, setMessage] = useState('');
   const buttonIsDisabled = !ctx.activeUser._id || message.trim().length === 0;
   async function sendMessageHandler() {
-    console.log(message);
-    console.log(ctx.activeUser._id);
     const response = await fetch(
       `http://localhost:3000/message/send/${ctx.activeUser._id}`,
       {
