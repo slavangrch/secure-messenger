@@ -9,6 +9,7 @@ const { isAuth } = require('./middleware/isAuth');
 const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
+const socketManager = require('./socket/socket');
 
 app.use(bodyParser.json());
 app.use(cors({ origin: 'http://localhost:5173' }));
@@ -30,19 +31,14 @@ app.use((error, req, res, next) => {
   const data = error.data || [];
   res.status(status).json({ message: message, data: data });
 });
+const onlineUserIds = {};
 
 mongoose
   .connect(DB_URL)
   .then((result) => {
     const server = app.listen(3000);
-    const io = require('./socket').init(server);
-    io.on('connection', (socket) => {
-      console.log('socket connected', socket.id);
-
-      socket.on('disconnect', () => {
-        console.log('socket disconnected');
-      });
-    });
+    const io = require('./socket/socketHelper').init(server);
+    socketManager();
   })
   .catch((err) => {
     console.log(err);

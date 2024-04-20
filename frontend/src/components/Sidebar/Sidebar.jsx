@@ -10,6 +10,7 @@ import { UsersContext } from '../../store/users-context';
 
 export default function Sidebar() {
   const ctx = useContext(UsersContext);
+
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState(ctx.sidebarUsers.users);
 

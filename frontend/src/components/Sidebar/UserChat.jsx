@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import ProfileImage from '../../images/profile-image.png';
 import classes from './UserChat.module.css';
-import { useContext } from 'react';
 import { UsersContext } from '../../store/users-context';
+import { SocketContext } from '../../store/socket-context';
 export default function UserChat({ user }) {
   const { activeUser, selectChatHandler } = useContext(UsersContext);
+  const { onlineUsers } = useContext(SocketContext);
+  const isOnline = onlineUsers.find((userId) => userId === user._id);
   return (
     <div
       className={`${classes.userChatContainer} 
@@ -12,7 +14,10 @@ export default function UserChat({ user }) {
         `}
       onClick={() => selectChatHandler(user)}
     >
-      <img src={ProfileImage} alt="" />
+      <div className={classes.imageContainer}>
+        <img src={ProfileImage} alt="" />
+        <div className={isOnline ? classes.online : null}></div>
+      </div>
       <div className={classes.userInfo}>
         <p className={classes.name}>{user.username}</p>
         {/* <p className={classes.lastMessage}></p> */}
