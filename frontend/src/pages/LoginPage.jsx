@@ -1,8 +1,12 @@
 import LoginForm from '../components/Auth/LoginForm';
 import classes from './AuthPage.module.css';
 import { validateEmail, validatePassword } from '../utils/validateInput';
-import { storeData } from '../utils/localStorageManipulation';
+import { getPrivateKey, storeData } from '../utils/localStorageManipulation';
 import { redirect, useNavigate } from 'react-router-dom';
+import { generateKeyPair } from '../security/keyPairGeneration';
+
+// import * as openpgp from 'openpgp';
+// import { generateKeyPair } from '../security/keyPairGeneration';
 
 export default function LoginPage() {
   return (
@@ -13,7 +17,6 @@ export default function LoginPage() {
 }
 
 export async function action({ request }) {
-  // const navigate = useNavigate();
   const data = await request.formData();
   const submitData = {
     email: data.get('email'),
@@ -26,10 +29,28 @@ export async function action({ request }) {
   if (!emailIsValid || !passwordIsValid) {
     return { emailIsValid, passwordIsValid };
   }
+
+  // try {
+  //   const privateKey = getPrivateKey();
+  //   if (!privateKey) {
+  //   }
+  // } catch (error) {}
+
+  const { publicKeyJwk, privateKeyJwk } = await generateKeyPair();
+  console.log(publicKeyJwk, privateKeyJwk);
+  // submitData.publicKey = publicKeyJwk;
+  // console.log(submitData);
+  console.log({
+    submitData,
+    publicKeyJwk: JSON.stringify(publicKeyJwk),
+  });
   const response = await fetch('http://localhost:3000/auth/login', {
     method: request.method,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(submitData),
+    body: JSON.stringify({
+      submitData,
+      publicKeyJwk: JSON.stringify(publicKeyJwk),
+    }),
   });
 
   if (!response.ok) {
@@ -40,7 +61,29 @@ export async function action({ request }) {
 
   const resultData = await response.json();
   const { userId, token } = resultData;
+
+  // try {
+  //   const { privateKey, publicKey } = await openpgp.generateKey({
+  //     type: 'rsa',
+  //     rsaBits: 4096,
+  //     userIDs: [{ email: submitData.email }],
+  //   });
+  //   console.log(privateKey);
+  //   console.log(publicKey);
+  // } catch (error) {
+  //   console.log(error);
+  // }
+
+  // // async function sendPublicKey(publicKey) {
+  // const publicKeyResponse = await fetch('/api/publicKey', {
+  //   method: 'POST',
+  //   body: JSON.stringify(publicKey),
+  // });
+  // // }
+
   storeData(userId, token);
+  localStorage.setItem('privateKey', JSON.stringify(privateKeyJwk));
+  localStorage.setItem('publicKey', JSON.stringify(publicKeyJwk));
   const expiration = new Date();
   expiration.setTime(expiration.getTime() + 7 * 24 * 60 * 60 * 1000);
   localStorage.setItem('tokenExpiration', expiration.toISOString());

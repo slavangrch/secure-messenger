@@ -3,5 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/user');
 
 router.get('/', userController.getSidebarChats);
+router.get('/getPublicKey/:receiverId', userController.getReceiverPublicKey);
 
 module.exports = router;

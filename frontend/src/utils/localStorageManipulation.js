@@ -7,6 +7,20 @@ export function deleteDataFromStorage() {
   localStorage.removeItem('token');
   localStorage.removeItem('userId');
   localStorage.removeItem('tokenExpiration');
+  // localStorage.removeItem('privateKey');
+}
+
+export function getPrivateKey() {
+  const privateKey = localStorage.getItem('privateKey');
+  const parsedPrivateKey = JSON.parse(privateKey);
+  return parsedPrivateKey;
+  // return JSON.parse(privateKey);
+}
+
+export function getPublicKey() {
+  const publicKey = localStorage.getItem('publicKey');
+  const parsedPublicKey = JSON.parse(publicKey);
+  return parsedPublicKey;
 }
 
 export function getToken() {

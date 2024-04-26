@@ -1,7 +1,6 @@
 const io = require('./socketHelper');
 const onlineUserIds = {};
 exports.getSocketId = (id) => {
-  console.log(onlineUserIds[id]);
   return onlineUserIds[id];
 };
 

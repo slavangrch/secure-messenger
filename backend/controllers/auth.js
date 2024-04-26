@@ -47,8 +47,9 @@ exports.signup = async (req, res, next) => {
 };
 exports.login = async (req, res, next) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
+    const email = req.body.submitData.email;
+    const password = req.body.submitData.password;
+    const publicKey = req.body.publicKeyJwk;
     const user = await User.findOne({ email: email });
 
     if (!user) {
@@ -63,6 +64,11 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+    console.log(publicKey);
+
+    user.publicKey = publicKey;
+    const addpublic = await user.save();
+    console.log(addpublic);
 
     const token = jwt.sign(
       {

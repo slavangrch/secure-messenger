@@ -15,6 +15,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  publicKey: {
+    type: String,
+  },
   imageUrl: {
     type: String,
     default: '',

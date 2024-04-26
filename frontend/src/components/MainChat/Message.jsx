@@ -1,14 +1,23 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ProfileImage from '../../images/profile-image.png';
 import classes from './Message.module.css';
 import { UsersContext } from '../../store/users-context';
 import { getToken, getUserId } from '../../utils/localStorageManipulation';
 import formatTime from '../../utils/timeFormatter';
-export default function Message({ message }) {
+import { decryptMessage } from '../../security/decryptMessage';
+export default function Message({ message, sharedKey }) {
   const ctx = useContext(UsersContext);
   const receiver = ctx.activeUser;
   const time = formatTime(message.createdAt);
   const messageFromOwner = message.receiverId === receiver._id;
+  const [decMes, setDecMes] = useState('');
+  useEffect(() => {
+    async function getDectypted() {
+      const decryptedMessage = await decryptMessage(message.message, sharedKey);
+      setDecMes(decryptedMessage);
+    }
+    getDectypted();
+  }, [message, sharedKey]);
 
   return (
     <div
@@ -26,7 +35,7 @@ export default function Message({ message }) {
           </p>
           <p className={classes.time}>{time}</p>
         </div>
-        <p className={classes.message}>{message.message}</p>
+        <p className={classes.message}>{decMes}</p>
       </div>
     </div>
   );
