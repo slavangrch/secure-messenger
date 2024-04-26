@@ -19,26 +19,6 @@ export default function MainChat() {
   const token = getToken();
   const [privateKey, setPrivateKey] = useState(getPrivateKey());
 
-  // const decryptedMessagee = await decryptMessage(message, sharedKey );
-  // async function decryptSingle(message) {
-  //   con
-  // }
-  useEffect(() => {
-    async function getMessages() {
-      if (ctx.activeUser._id) {
-        const response = await fetch(
-          `http://localhost:3000/message/${ctx.activeUser._id}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        const messages = await response.json();
-        console.log(messages.chat);
-        // const decryptedMessages = await decryptedMessages()
-        setMessages(messages.chat);
-      }
-    }
-    getMessages();
-  }, [ctx.activeUser, token]);
-
   useEffect(() => {
     async function getReceiverPublicKey() {
       const response = await fetch(
@@ -57,8 +37,8 @@ export default function MainChat() {
     async function getSharedKey() {
       try {
         if (receiverPublicKey && privateKey) {
-          console.log(receiverPublicKey);
-          console.log(privateKey);
+          // console.log(receiverPublicKey);
+          // console.log(privateKey);
           const sharedKey = await generateSharedKey(
             receiverPublicKey,
             privateKey
@@ -74,10 +54,63 @@ export default function MainChat() {
   }, [receiverPublicKey, privateKey]);
 
   useEffect(() => {
+    // const updateMessagesEndRef = () => {
+    //   messagesEndRef.current = document.getElementById('messages-end');
+    // };
+
+    // // Викликаємо функцію для оновлення значення messagesEndRef
+    // updateMessagesEndRef();
+    async function getMessages() {
+      if (ctx.activeUser._id) {
+        const response = await fetch(
+          `http://localhost:3000/message/${ctx.activeUser._id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const messages = await response.json();
+        console.log(messages);
+        // console.log(messages.chat);
+        // const decryptedMessages = await decryptedMessages()
+        if (sharedKey && messages.chat && messages.chat.length > 0) {
+          const decryptedMessages = await Promise.all(
+            messages.chat.map(async (message) => {
+              // console.log(sharedKey);
+              // console.log(message);
+              let copiedMessage = { ...message };
+              copiedMessage.message = await decryptMessage(
+                message.message,
+                sharedKey
+              );
+              return copiedMessage;
+            })
+          );
+          // console.log(decryptedMessages);
+          setMessages(decryptedMessages); //messages.chat
+        } else {
+          setMessages(messages.chat);
+        }
+      }
+    }
+    getMessages();
+  }, [ctx.activeUser, token, sharedKey]);
+
+  // const [decMes, setDecMes] = useState('');
+  // useEffect(() => {
+  //   async function getDectypted() {
+  //     const decryptedMessage = await decryptMessage(message.message, sharedKey);
+  //     setDecMes(decryptedMessage);
+  //   }
+  //   getDectypted();
+  // }, [message, sharedKey]);
+
+  useEffect(() => {
     if (socket) {
-      socket.on('new-message', (message) => {
+      socket.on('new-message', async (message) => {
+        const decryptedMessage = await decryptMessage(
+          message.message,
+          sharedKey
+        );
         setMessages((prevMessagges) => {
-          return [...prevMessagges, message];
+          return [...prevMessagges, { ...message, message: decryptedMessage }];
         });
       });
     }
@@ -89,6 +122,7 @@ export default function MainChat() {
       messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
     }
   }, [messages, ctx.activeUser]);
+
   function addMessage(message) {
     setMessages((prevMessagges) => {
       return [...prevMessagges, message];
@@ -115,7 +149,7 @@ export default function MainChat() {
                   ></Message>
                 );
               })}
-              <div ref={messagesEndRef} />
+              <div id="messages-end" ref={messagesEndRef} />
             </div>
           ) : (
             <p className={`${classes.messages} ${classes.fallbackText}`}>

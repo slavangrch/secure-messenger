@@ -26,7 +26,7 @@ export default function InputMessage({ onSend, sharedKey }) {
     const answer = await response.json();
     console.log(answer);
     console.log(message);
-    onSend({ ...answer.newMessage, message: message });
+    onSend({ ...answer.newMessage, message: message }); //, message: message
     setMessage('');
   }
   return (

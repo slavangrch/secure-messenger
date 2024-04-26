@@ -1,7 +1,11 @@
 import LoginForm from '../components/Auth/LoginForm';
 import classes from './AuthPage.module.css';
 import { validateEmail, validatePassword } from '../utils/validateInput';
-import { getPrivateKey, storeData } from '../utils/localStorageManipulation';
+import {
+  getPrivateKey,
+  getPublicKey,
+  storeData,
+} from '../utils/localStorageManipulation';
 import { redirect, useNavigate } from 'react-router-dom';
 import { generateKeyPair } from '../security/keyPairGeneration';
 
@@ -29,21 +33,25 @@ export async function action({ request }) {
   if (!emailIsValid || !passwordIsValid) {
     return { emailIsValid, passwordIsValid };
   }
+  let privateKeyJwk;
+  let publicKeyJwk;
+  try {
+    privateKeyJwk = getPrivateKey();
+    publicKeyJwk = getPublicKey();
+    if (!privateKeyJwk || !publicKeyJwk) {
+      ({ publicKeyJwk, privateKeyJwk } = await generateKeyPair());
+      console.log(publicKeyJwk, privateKeyJwk);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 
-  // try {
-  //   const privateKey = getPrivateKey();
-  //   if (!privateKey) {
-  //   }
-  // } catch (error) {}
-
-  const { publicKeyJwk, privateKeyJwk } = await generateKeyPair();
-  console.log(publicKeyJwk, privateKeyJwk);
   // submitData.publicKey = publicKeyJwk;
   // console.log(submitData);
-  console.log({
-    submitData,
-    publicKeyJwk: JSON.stringify(publicKeyJwk),
-  });
+  // console.log({
+  //   submitData,
+  //   publicKeyJwk: JSON.stringify(publicKeyJwk),
+  // });
   const response = await fetch('http://localhost:3000/auth/login', {
     method: request.method,
     headers: { 'Content-Type': 'application/json' },
@@ -61,25 +69,6 @@ export async function action({ request }) {
 
   const resultData = await response.json();
   const { userId, token } = resultData;
-
-  // try {
-  //   const { privateKey, publicKey } = await openpgp.generateKey({
-  //     type: 'rsa',
-  //     rsaBits: 4096,
-  //     userIDs: [{ email: submitData.email }],
-  //   });
-  //   console.log(privateKey);
-  //   console.log(publicKey);
-  // } catch (error) {
-  //   console.log(error);
-  // }
-
-  // // async function sendPublicKey(publicKey) {
-  // const publicKeyResponse = await fetch('/api/publicKey', {
-  //   method: 'POST',
-  //   body: JSON.stringify(publicKey),
-  // });
-  // // }
 
   storeData(userId, token);
   localStorage.setItem('privateKey', JSON.stringify(privateKeyJwk));

@@ -10,14 +10,14 @@ export default function Message({ message, sharedKey }) {
   const receiver = ctx.activeUser;
   const time = formatTime(message.createdAt);
   const messageFromOwner = message.receiverId === receiver._id;
-  const [decMes, setDecMes] = useState('');
-  useEffect(() => {
-    async function getDectypted() {
-      const decryptedMessage = await decryptMessage(message.message, sharedKey);
-      setDecMes(decryptedMessage);
-    }
-    getDectypted();
-  }, [message, sharedKey]);
+  // const [decMes, setDecMes] = useState('');
+  // useEffect(() => {
+  //   async function getDectypted() {
+  //     const decryptedMessage = await decryptMessage(message.message, sharedKey);
+  //     setDecMes(decryptedMessage);
+  //   }
+  //   getDectypted();
+  // }, [message, sharedKey]);
 
   return (
     <div
@@ -35,7 +35,7 @@ export default function Message({ message, sharedKey }) {
           </p>
           <p className={classes.time}>{time}</p>
         </div>
-        <p className={classes.message}>{decMes}</p>
+        <p className={classes.message}>{message.message}</p>
       </div>
     </div>
   );
