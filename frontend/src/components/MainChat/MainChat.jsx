@@ -67,26 +67,28 @@ export default function MainChat() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const messages = await response.json();
-        console.log(messages);
+        // console.log(messages);
         // console.log(messages.chat);
         // const decryptedMessages = await decryptedMessages()
-        if (sharedKey && messages.chat && messages.chat.length > 0) {
-          const decryptedMessages = await Promise.all(
-            messages.chat.map(async (message) => {
-              // console.log(sharedKey);
-              // console.log(message);
-              let copiedMessage = { ...message };
-              copiedMessage.message = await decryptMessage(
-                message.message,
-                sharedKey
-              );
-              return copiedMessage;
-            })
-          );
-          // console.log(decryptedMessages);
-          setMessages(decryptedMessages); //messages.chat
-        } else {
-          setMessages(messages.chat);
+        if (sharedKey) {
+          if (messages.chat && messages.chat.length > 0) {
+            const decryptedMessages = await Promise.all(
+              messages.chat.map(async (message) => {
+                // console.log(sharedKey);
+                // console.log(message);
+                let copiedMessage = { ...message };
+                copiedMessage.message = await decryptMessage(
+                  message.message,
+                  sharedKey
+                );
+                return copiedMessage;
+              })
+            );
+            // console.log(decryptedMessages);
+            setMessages(decryptedMessages); //messages.chat
+          } else {
+            setMessages(messages.chat);
+          }
         }
       }
     }
@@ -102,16 +104,24 @@ export default function MainChat() {
   //   getDectypted();
   // }, [message, sharedKey]);
 
+  // if user ==== active!!! todo
+  // fix when 0 messages and we deliver first error ...prevMess
+
   useEffect(() => {
     if (socket) {
       socket.on('new-message', async (message) => {
-        const decryptedMessage = await decryptMessage(
-          message.message,
-          sharedKey
-        );
-        setMessages((prevMessagges) => {
-          return [...prevMessagges, { ...message, message: decryptedMessage }];
-        });
+        if (ctx.activeUser._id === message.senderId) {
+          const decryptedMessage = await decryptMessage(
+            message.message,
+            sharedKey
+          );
+          setMessages((prevMessagges) => {
+            return [
+              ...prevMessagges,
+              { ...message, message: decryptedMessage },
+            ];
+          });
+        }
       });
     }
     return () => socket?.off('new-message');
@@ -125,7 +135,7 @@ export default function MainChat() {
 
   function addMessage(message) {
     setMessages((prevMessagges) => {
-      return [...prevMessagges, message];
+      return [...(prevMessagges || null), message];
     });
   }
 

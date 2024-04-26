@@ -11,7 +11,7 @@ export default function InputMessage({ onSend, sharedKey }) {
   const buttonIsDisabled = !ctx.activeUser._id || message.trim().length === 0;
   async function sendMessageHandler() {
     const encryptedMessage = await encryptMessage(message, sharedKey);
-    console.log(encryptMessage);
+    // console.log(encryptedMessage);
     const response = await fetch(
       `http://localhost:3000/message/send/${ctx.activeUser._id}`,
       {
