@@ -24,3 +24,16 @@ exports.getReceiverPublicKey = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getEditUser = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const user = await user.findById(userId).select('-password');
+    res.status(200).json({ user });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};

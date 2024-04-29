@@ -11,7 +11,7 @@ export default function Logout() {
   }
   return (
     <>
-      <FiLogOut className={classes.icon} onClick={logout} />
+      <FiLogOut className={classes.iconLogout} onClick={logout} />
     </>
   );
 }
