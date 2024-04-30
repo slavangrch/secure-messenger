@@ -18,16 +18,19 @@ export default function MainChat() {
   const [sharedKey, setSharedKey] = useState();
   const token = getToken();
   const [privateKey, setPrivateKey] = useState(getPrivateKey());
+  const [userInfo, setUserInfo] = useState();
 
   useEffect(() => {
     async function getReceiverPublicKey() {
-      const response = await fetch(
-        `http://localhost:3000/users/getPublicKey/${ctx.activeUser._id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const receiverPublicKey = await response.json();
-      if (receiverPublicKey.publicKey) {
-        setReceiverPublicKey(JSON.parse(receiverPublicKey.publicKey));
+      if (ctx.activeUser._id) {
+        const response = await fetch(
+          `http://localhost:3000/users/getPublicKey/${ctx.activeUser._id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const receiverPublicKey = await response.json();
+        if (receiverPublicKey.publicKey) {
+          setReceiverPublicKey(JSON.parse(receiverPublicKey.publicKey));
+        }
       }
     }
     getReceiverPublicKey();
@@ -52,6 +55,22 @@ export default function MainChat() {
     }
     getSharedKey();
   }, [receiverPublicKey, privateKey]);
+
+  useEffect(() => {
+    async function getUserInfo() {
+      const response = await fetch(
+        `http://localhost:3000/users/getLoggedUser`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setUserInfo(data.user);
+    }
+    getUserInfo();
+  }, [token]);
 
   useEffect(() => {
     // const updateMessagesEndRef = () => {
@@ -153,6 +172,7 @@ export default function MainChat() {
               {messages.map((message) => {
                 return (
                   <Message
+                    userInfo={userInfo}
                     sharedKey={sharedKey}
                     key={message._id}
                     message={message}

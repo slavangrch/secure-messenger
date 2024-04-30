@@ -3,6 +3,7 @@ import ProfileImage from '../../images/profile-image.png';
 import classes from './UserChat.module.css';
 import { UsersContext } from '../../store/users-context';
 import { SocketContext } from '../../store/socket-context';
+import { LuBarChartHorizontalBig } from 'react-icons/lu';
 export default function UserChat({ user }) {
   const { activeUser, selectChatHandler } = useContext(UsersContext);
   const { onlineUsers } = useContext(SocketContext);
@@ -15,7 +16,14 @@ export default function UserChat({ user }) {
       onClick={() => selectChatHandler(user)}
     >
       <div className={classes.imageContainer}>
-        <img src={ProfileImage} alt="" />
+        <img
+          src={
+            user.imageUrl
+              ? `http://localhost:3000/${user.imageUrl}`
+              : ProfileImage
+          }
+          alt=""
+        />
         <div className={isOnline ? classes.online : null}></div>
       </div>
       <div className={classes.userInfo}>

@@ -10,8 +10,35 @@ const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 const { socketManager } = require('./socket/socket');
+const path = require('path');
+const multer = require('multer');
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 app.use(bodyParser.json());
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use((req, res, next) => {
   // res.setHeader('Access-Control-Allow-Origin', '*');

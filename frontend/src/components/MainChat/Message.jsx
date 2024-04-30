@@ -5,11 +5,18 @@ import { UsersContext } from '../../store/users-context';
 import { getToken, getUserId } from '../../utils/localStorageManipulation';
 import formatTime from '../../utils/timeFormatter';
 import { decryptMessage } from '../../security/decryptMessage';
-export default function Message({ message, sharedKey }) {
+export default function Message({ message, sharedKey, userInfo }) {
   const ctx = useContext(UsersContext);
   const receiver = ctx.activeUser;
   const time = formatTime(message.createdAt);
   const messageFromOwner = message.receiverId === receiver._id;
+  const receiverPic = receiver.imageUrl
+    ? `http://localhost:3000/${receiver.imageUrl}`
+    : ProfileImage;
+  const senderPic = userInfo?.imageUrl
+    ? `http://localhost:3000/${userInfo.imageUrl}`
+    : ProfileImage;
+
   // const [decMes, setDecMes] = useState('');
   // useEffect(() => {
   //   async function getDectypted() {
@@ -27,7 +34,7 @@ export default function Message({ message, sharedKey }) {
           : `${classes.messageWrapper}`
       }
     >
-      <img src={ProfileImage} alt="" />
+      <img src={messageFromOwner ? senderPic : receiverPic} alt="" />
       <div className={classes.messageInfo}>
         <div className={classes.wrapperNameDate}>
           <p className={classes.name}>

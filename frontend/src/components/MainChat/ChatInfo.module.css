@@ -12,6 +12,8 @@
     height: 40px;
     border-radius: 50%;
     margin-left: 15px;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 
 .chatInfoWrapper {

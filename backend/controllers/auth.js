@@ -64,11 +64,11 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    console.log(publicKey);
+    // console.log(publicKey);
 
     user.publicKey = publicKey;
     const addpublic = await user.save();
-    console.log(addpublic);
+    // console.log(addpublic);
 
     const token = jwt.sign(
       {

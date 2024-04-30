@@ -1,5 +1,5 @@
 .editWrapper {
-    width: 300px;
+    min-width: 300px;
     padding: 30px 20px;
 }
 
@@ -14,6 +14,9 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 50%;;
+    
 }
 
 .actionPicButtons {
@@ -24,17 +27,22 @@
 }
 
 .actionPicButtons button,
-.actionBtn button {
+.actionBtn button,
+.customFileUpload {
     cursor: pointer;
     width: 70px;
     border: 1px solid var(--color-light-gray-border);
     padding: 5px;
     border-radius: 6px;
     background-color: white;
+    font-size: 14px;
+    text-align: center;
+    font-family: inherit;
     transition: background-color 0.3s;
 }
 
-.actionPicButtons button:hover {
+.actionPicButtons button:hover,
+.customFileUpload:hover {
     border: 1px solid white;
     background-color: var(--color-light-gray-border);
 }
@@ -98,3 +106,16 @@
     line-height: 100%;
 }
 
+/* .customFileUpload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 4px;
+} */
+
+/* .customFileUpload:hover {
+    background-color: #e0e0e0;
+  } */
