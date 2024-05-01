@@ -38,7 +38,11 @@ export default function SettingsBar() {
       <UserPic></UserPic>
       {modalIsVisible ? (
         <Modal onClose={hideEditModal}>
-          <EditUser userInfo={userInfo} onClose={hideEditModal}></EditUser>
+          <EditUser
+            hideEditModal={hideEditModal}
+            userInfo={userInfo}
+            onClose={hideEditModal}
+          ></EditUser>
         </Modal>
       ) : null}
       <Settings onOpen={openEditModal}></Settings>

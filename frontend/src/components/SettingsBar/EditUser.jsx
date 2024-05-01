@@ -4,12 +4,12 @@ import classes from './EditUser.module.css';
 import { useState, useEffect } from 'react';
 import { Form } from 'react-router-dom';
 import { getToken } from '../../utils/localStorageManipulation';
-export default function EditUser({ onClose, userInfo }) {
+export default function EditUser({ onClose, userInfo, hideEditModal }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [image, setImage] = useState(null);
+  const [validationError, setValidationError] = useState(null);
   const token = getToken();
-  console.log(userInfo);
-
+  console.log(validationError);
   const toggleTooltip = () => {
     setShowTooltip((prevTooltip) => !prevTooltip);
   };
@@ -30,7 +30,6 @@ export default function EditUser({ onClose, userInfo }) {
   async function editUserHandler(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
-    // console.log(formData);
 
     const response = await fetch(`http://localhost:3000/users/editUser`, {
       method: 'POST',
@@ -39,8 +38,15 @@ export default function EditUser({ onClose, userInfo }) {
       },
       body: formData,
     });
+    if (!response.ok) {
+      const error = await response.json();
+      setValidationError(error);
+      return error;
+    }
+    // setValidationError(null);
     const resData = await response.json();
     console.log(resData.result);
+    hideEditModal();
   }
   return (
     <div className={classes.editWrapper}>
@@ -71,7 +77,9 @@ export default function EditUser({ onClose, userInfo }) {
           />
         </div>
         <div className={classes.line}></div>
-
+        <div className={classes.errorMessage}>
+          {validationError ? validationError.message : null}
+        </div>
         <div className={classes.inputField}>
           <label htmlFor="username">Username</label>
           <input

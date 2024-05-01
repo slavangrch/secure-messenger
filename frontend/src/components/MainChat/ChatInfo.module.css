@@ -3,7 +3,7 @@
     gap: 10px;
     align-items: center;
     padding: 20px 5px;
-    width: 100%;
+    width: 90%;
     color: black;
 }
 
@@ -19,4 +19,57 @@
 .chatInfoWrapper {
     background-color: var(--color-ligth-green);
     transition: background-color 0.2s;
+}
+
+.flexWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    /* height: 100vh; */
+}
+
+.iconLock * {
+    width: 25px;
+    height: 25px;
+    color: black;
+    cursor: pointer;
+}
+
+.confirmModal {
+    margin-top: 100px;
+    min-width: 200px;
+    max-width: 600px;
+    padding: 30px 20px;
+}
+
+.confirmModal p{
+    text-wrap: wrap;
+    line-height: 150%;
+    font-size: 14px;
+}
+
+button {
+    cursor: pointer;
+    width: 70px;
+    border: 1px solid var(--color-light-gray-border);
+    padding: 5px;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 13px;
+    text-align: center;
+    font-family: inherit;
+    transition: background-color 0.3s;
+}
+
+.actionButtons{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+button:hover{
+    border: 1px solid white;
+    background-color: var(--color-light-gray-border);
 }

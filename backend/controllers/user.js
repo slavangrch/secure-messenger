@@ -1,12 +1,14 @@
 const User = require('../models/user');
-const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
+const Chat = require('../models/chat');
 exports.getSidebarChats = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const users = await User.find({ _id: { $ne: userId } }).select('-password');
+    const users = await User.find({ _id: { $ne: userId } }).select(
+      '-password -fakePassword'
+    );
     res.status(200).json({ users });
   } catch (error) {
     if (!error.statusCode) {
@@ -32,7 +34,7 @@ exports.getReceiverPublicKey = async (req, res, next) => {
 exports.getEditUser = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findById(userId).select('-password -fakePassword');
     res.status(200).json({ user });
   } catch (error) {
     if (!error.statusCode) {
@@ -44,13 +46,6 @@ exports.getEditUser = async (req, res, next) => {
 
 exports.editUser = async (req, res, next) => {
   try {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   const error = new Error('Wrong input!');
-    //   error.statusCode = 422;
-    //   error.data = errors.array();
-    //   throw error;
-    // }
     const userId = req.userId;
     const imageUrl = req.file?.path || '';
     const username = req.body.username;
@@ -59,7 +54,6 @@ exports.editUser = async (req, res, next) => {
     const fakePassword = req.body['fake-password'] || '';
 
     const user = await User.findById(userId);
-    // console.log(user);
     if (username && username.length <= 2) {
       const error = new Error('Username should be minimun 3 characters!');
       error.statusCode = 401;
@@ -89,12 +83,26 @@ exports.editUser = async (req, res, next) => {
         }
       }
     }
-    if (fakePassword && fakePassword.trim().length >= 8) {
-      user.fakePassword = fakePassword;
+    if (fakePassword && fakePassword.trim().length < 8) {
+      const error = new Error('You should set valid fake password!');
+      error.statusCode = 401;
+      throw error;
+    } else if (fakePassword && fakePassword.trim().length >= 8) {
+      const fakePasswordIsEqual = await bcrypt.compare(
+        fakePassword,
+        user.password
+      );
+      if (fakePasswordIsEqual) {
+        const error = new Error('Fake password should be unique!');
+        error.statusCode = 401;
+        throw error;
+      }
+      const hashedFakePassword = await bcrypt.hash(fakePassword, 12);
+      user.fakePassword = hashedFakePassword;
     }
     const result = await user.save();
+    // console.log(result);
     res.status(200).json({ result });
-    // console.log(imageUrl, oldPassword, newPassword, fakePassword, username);
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -107,8 +115,34 @@ exports.editUser = async (req, res, next) => {
 exports.getUserInfo = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const user = await User.findById(userId).select('-password');
+    const user = await User.findById(userId).select('-password -fakePassword');
     res.status(200).json({ user });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.setChatIsSecret = async (req, res, next) => {
+  try {
+    const senderId = req.userId;
+    const receiverId = req.params.receiverId;
+    const isSecret = req.body.isSecret;
+    const chat = await Chat.findOne({
+      members: { $all: [senderId, receiverId] },
+    });
+    if (!chat) {
+      const error = new Error('No chat found!');
+      error.statusCode = 401;
+      throw error;
+    }
+    chat.isSecret = isSecret;
+    const result = await chat.save();
+    // console.log(result);
+    res.status(200).json({ isSecret: result.isSecret });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

@@ -19,6 +19,7 @@ export default function MainChat() {
   const token = getToken();
   const [privateKey, setPrivateKey] = useState(getPrivateKey());
   const [userInfo, setUserInfo] = useState();
+  const [isSecret, setIsSecret] = useState(null);
 
   useEffect(() => {
     async function getReceiverPublicKey() {
@@ -86,6 +87,8 @@ export default function MainChat() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const messages = await response.json();
+        const isSecret = messages.isSecret;
+        setIsSecret(isSecret);
         // console.log(messages);
         // console.log(messages.chat);
         // const decryptedMessages = await decryptedMessages()
@@ -166,7 +169,7 @@ export default function MainChat() {
         </p>
       ) : (
         <>
-          <ChatInfo></ChatInfo>
+          <ChatInfo isSecretChat={isSecret}></ChatInfo>
           {messages && messages.length > 0 ? (
             <div className={classes.messages}>
               {messages.map((message) => {
