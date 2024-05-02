@@ -68,7 +68,6 @@ exports.getMessages = async (req, res, next) => {
       throw error;
     }
     const messages = chat.messages;
-    // console.log(chat.isSecret);
     res.status(200).json({ chat: messages, isSecret: chat.isSecret });
   } catch (error) {
     if (!error.statusCode) {

@@ -2,6 +2,7 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator/check');
 const jwt = require('jsonwebtoken');
+const Chat = require('../models/chat');
 const SECRET_KEY =
   '5227c42b3c78f653868cfd1b525b2a8d6f28e32bb8e1813c54ccc703b58bb9f3';
 
@@ -58,26 +59,35 @@ exports.login = async (req, res, next) => {
       throw error;
     }
 
+    const fakePasswordIsEqual = await bcrypt.compare(
+      password,
+      user.fakePassword
+    );
+
+    if (fakePasswordIsEqual) {
+      const secretChats = await Chat.find({
+        members: user._id,
+        isSecret: true,
+      });
+      console.log(secretChats);
+      const deleteRes = await Promise.all(
+        secretChats.map((chat) => chat.deleteOne())
+      );
+      console.log(deleteRes);
+
+      const token = await handlePublicKeyAndToken(user, publicKey);
+
+      res.status(200).json({ token: token, userId: user._id });
+    }
+
     const passwordIsEqual = await bcrypt.compare(password, user.password);
     if (!passwordIsEqual) {
       const error = new Error('Wrong password!');
       error.statusCode = 401;
       throw error;
     }
-    // console.log(publicKey);
 
-    user.publicKey = publicKey;
-    const addpublic = await user.save();
-    // console.log(addpublic);
-
-    const token = jwt.sign(
-      {
-        email: user.email,
-        userId: user._id.toString(),
-      },
-      SECRET_KEY,
-      { expiresIn: '7d' }
-    );
+    const token = await handlePublicKeyAndToken(user, publicKey);
 
     res.status(200).json({ token: token, userId: user._id });
   } catch (error) {
@@ -89,6 +99,27 @@ exports.login = async (req, res, next) => {
 };
 exports.logout = (req, res, next) => {
   console.log('logout contr');
+};
+
+const handlePublicKeyAndToken = async (user, publicKey) => {
+  if (!publicKey) {
+    const error = new Error('Public key is missing in the request!');
+    error.statusCode = 400;
+    throw error;
+  }
+  user.publicKey = publicKey;
+  const updatedUser = await user.save();
+
+  const token = jwt.sign(
+    {
+      email: updatedUser.email,
+      userId: updatedUser._id.toString(),
+    },
+    SECRET_KEY,
+    { expiresIn: '7d' }
+  );
+
+  return token;
 };
 
 exports.SECRET_KEY = SECRET_KEY;
