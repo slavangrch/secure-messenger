@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import ProfileImage from '../../images/profile-image.png';
 import classes from './UserChat.module.css';
 import { UsersContext } from '../../store/users-context';
 import { SocketContext } from '../../store/socket-context';
-import { LuBarChartHorizontalBig } from 'react-icons/lu';
 export default function UserChat({ user }) {
   const { activeUser, selectChatHandler } = useContext(UsersContext);
   const { onlineUsers } = useContext(SocketContext);

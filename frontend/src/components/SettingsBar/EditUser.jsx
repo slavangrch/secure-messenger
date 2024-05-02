@@ -1,27 +1,21 @@
 import ProfileImage from '../../images/profile-image.png';
 import { LuAsterisk } from 'react-icons/lu';
 import classes from './EditUser.module.css';
-import { useState, useEffect } from 'react';
-import { Form } from 'react-router-dom';
-import { getToken } from '../../utils/localStorageManipulation';
+import { useState } from 'react';
+import { getFlag, getToken } from '../../utils/localStorageManipulation';
 export default function EditUser({ onClose, userInfo, hideEditModal }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [image, setImage] = useState(null);
   const [validationError, setValidationError] = useState(null);
   const token = getToken();
-  console.log(validationError);
+  const flag = getFlag();
   const toggleTooltip = () => {
     setShowTooltip((prevTooltip) => !prevTooltip);
   };
 
   const changeImageHandler = (e) => {
     setImage(e.target.files[0]);
-    // console.log(e.target.files[0]);
   };
-
-  //   const deleteImageHandler = (e) => {
-  //     setImage(null);
-  //   };
 
   const currentUserPic = userInfo.imageUrl
     ? `http://localhost:3000/${userInfo.imageUrl}`
@@ -43,9 +37,8 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
       setValidationError(error);
       return error;
     }
-    // setValidationError(null);
+
     const resData = await response.json();
-    console.log(resData.result);
     hideEditModal();
   }
   return (
@@ -107,24 +100,26 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
           <label htmlFor="new-password">New password</label>
           <input type="text" name="new-password" id="new-password" />
         </div>
-        <div className={classes.inputField}>
-          <label htmlFor="fake-password">Fake password</label>
-          <LuAsterisk
-            className={classes.hint}
-            onMouseEnter={toggleTooltip}
-            onMouseLeave={toggleTooltip}
-          />
-          {showTooltip && (
-            <div className={classes.tooltip}>
-              Fake password is a special password that you can set for your
-              account. Requiring a password adds an extra level of security,
-              ensuring that only trusted individuals can access sensitive
-              information. After entering the fake password during login, all
-              secret chats will be deleted. Be careful during login!
-            </div>
-          )}
-          <input type="text" name="fake-password" id="fake-password" />
-        </div>
+        {!flag && (
+          <div className={classes.inputField}>
+            <label htmlFor="fake-password">Fake password</label>
+            <LuAsterisk
+              className={classes.hint}
+              onMouseEnter={toggleTooltip}
+              onMouseLeave={toggleTooltip}
+            />
+            {showTooltip && (
+              <div className={classes.tooltip}>
+                Fake password is a special password that you can set for your
+                account. Requiring a password adds an extra level of security,
+                ensuring that only trusted individuals can access sensitive
+                information. After entering the fake password during login, all
+                secret chats will be deleted. Be careful during login!
+              </div>
+            )}
+            <input type="text" name="fake-password" id="fake-password" />
+          </div>
+        )}
         <div className={classes.actionBtn}>
           <button onClick={onClose}>Cancel</button>
           <button>Save</button>

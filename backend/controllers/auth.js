@@ -20,8 +20,6 @@ exports.signup = async (req, res, next) => {
     const password = req.body.password;
     const email = req.body.email;
     const confirmedPassword = req.body.confirmedPassword;
-    // const dafaultImageURL =
-    //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNVi9cbmMkUabLiF_3kfI94qngwPIM4gnrztEUv6Hopw&s';
 
     if (password !== confirmedPassword) {
       const error = new Error('Passwords should match!');
@@ -34,7 +32,6 @@ exports.signup = async (req, res, next) => {
       username,
       password: hashedPassword,
       email,
-      // imageURL: dafaultImageURL,
     });
 
     const result = await user.save();
@@ -52,32 +49,29 @@ exports.login = async (req, res, next) => {
     const password = req.body.submitData.password;
     const publicKey = req.body.publicKeyJwk;
     const user = await User.findOne({ email: email });
+    let fakePasswordIsEqual = undefined;
 
     if (!user) {
       const error = new Error("User with this email doesn't exists.");
       error.statusCode = 404;
       throw error;
     }
-
-    const fakePasswordIsEqual = await bcrypt.compare(
-      password,
-      user.fakePassword
-    );
+    if (user.fakePassword) {
+      fakePasswordIsEqual = await bcrypt.compare(password, user.fakePassword);
+    }
 
     if (fakePasswordIsEqual) {
       const secretChats = await Chat.find({
         members: user._id,
         isSecret: true,
       });
-      console.log(secretChats);
       const deleteRes = await Promise.all(
         secretChats.map((chat) => chat.deleteOne())
       );
-      console.log(deleteRes);
-
+      // console.log(deleteRes);
       const token = await handlePublicKeyAndToken(user, publicKey);
 
-      res.status(200).json({ token: token, userId: user._id });
+      res.status(200).json({ token: token, userId: user._id, isFake: true }); //isFake: true
     }
 
     const passwordIsEqual = await bcrypt.compare(password, user.password);
@@ -86,10 +80,9 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-
     const token = await handlePublicKeyAndToken(user, publicKey);
 
-    res.status(200).json({ token: token, userId: user._id });
+    res.status(200).json({ token: token, userId: user._id, isFake: false });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -97,9 +90,9 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
-exports.logout = (req, res, next) => {
-  console.log('logout contr');
-};
+// exports.logout = (req, res, next) => {
+//   console.log('logout controller');
+// };
 
 const handlePublicKeyAndToken = async (user, publicKey) => {
   if (!publicKey) {

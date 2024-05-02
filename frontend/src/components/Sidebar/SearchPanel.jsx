@@ -1,7 +1,5 @@
-import { useContext, useState } from 'react';
 import classes from './SearchPanel.module.css';
 import { BiSearch } from 'react-icons/bi';
-import { UsersContext } from '../../store/users-context';
 
 export default function SearchPanel({ search, setSearch, findChats }) {
   return (

@@ -73,7 +73,7 @@
 }
 
 .inputField input.invalid {
-    border: 1px solid rgb(168, 67, 67);
+    border: 1px solid var(--color-error);
 }
 
 .actionBtn {
@@ -108,7 +108,7 @@
 
 .errorMessage {
     font-size: 14px;
-    color: rgb(168, 67, 67);
+    color: var(--color-error);
     margin-bottom: 10px;
 }
 

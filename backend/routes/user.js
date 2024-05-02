@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
-const { body } = require('express-validator/check');
 
 router.get('/', userController.getSidebarChats);
 router.get('/getPublicKey/:receiverId', userController.getReceiverPublicKey);

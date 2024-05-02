@@ -41,13 +41,10 @@ export default function MainChat() {
     async function getSharedKey() {
       try {
         if (receiverPublicKey && privateKey) {
-          // console.log(receiverPublicKey);
-          // console.log(privateKey);
           const sharedKey = await generateSharedKey(
             receiverPublicKey,
             privateKey
           );
-          console.log(sharedKey);
           setSharedKey(sharedKey);
         }
       } catch (error) {
@@ -74,12 +71,6 @@ export default function MainChat() {
   }, [token]);
 
   useEffect(() => {
-    // const updateMessagesEndRef = () => {
-    //   messagesEndRef.current = document.getElementById('messages-end');
-    // };
-
-    // // Викликаємо функцію для оновлення значення messagesEndRef
-    // updateMessagesEndRef();
     async function getMessages() {
       if (ctx.activeUser._id) {
         const response = await fetch(
@@ -89,15 +80,11 @@ export default function MainChat() {
         const messages = await response.json();
         const isSecret = messages.isSecret;
         setIsSecret(isSecret);
-        // console.log(messages);
-        // console.log(messages.chat);
-        // const decryptedMessages = await decryptedMessages()
+
         if (sharedKey) {
           if (messages.chat && messages.chat.length > 0) {
             const decryptedMessages = await Promise.all(
               messages.chat.map(async (message) => {
-                // console.log(sharedKey);
-                // console.log(message);
                 let copiedMessage = { ...message };
                 copiedMessage.message = await decryptMessage(
                   message.message,
@@ -106,8 +93,7 @@ export default function MainChat() {
                 return copiedMessage;
               })
             );
-            // console.log(decryptedMessages);
-            setMessages(decryptedMessages); //messages.chat
+            setMessages(decryptedMessages);
           } else {
             setMessages(messages.chat);
           }
@@ -116,18 +102,6 @@ export default function MainChat() {
     }
     getMessages();
   }, [ctx.activeUser, token, sharedKey]);
-
-  // const [decMes, setDecMes] = useState('');
-  // useEffect(() => {
-  //   async function getDectypted() {
-  //     const decryptedMessage = await decryptMessage(message.message, sharedKey);
-  //     setDecMes(decryptedMessage);
-  //   }
-  //   getDectypted();
-  // }, [message, sharedKey]);
-
-  // if user ==== active!!! todo
-  // fix when 0 messages and we deliver first error ...prevMess
 
   useEffect(() => {
     if (socket) {

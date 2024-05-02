@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../controllers/auth');
 exports.isAuth = (req, res, next) => {
-  // console.log(req.headers);
-  // console.log(req.get('Authorization'));
   const authHeader = req.get('Authorization');
   if (!authHeader) {
     const error = new Error('No Authorization Header!');

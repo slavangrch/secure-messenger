@@ -1,18 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
-import ChatImage from '../../images/profile-image.png';
 import classes from '../MainChat/ChatInfo.module.css';
 import { UsersContext } from '../../store/users-context';
 import ProfileImage from '../../images/profile-image.png';
 import { CiUnlock } from 'react-icons/ci';
 import { CiLock } from 'react-icons/ci';
 import Modal from '../SettingsBar/Modal';
-import { getToken } from '../../utils/localStorageManipulation';
+import { getFlag, getToken } from '../../utils/localStorageManipulation';
 export default function ChatInfo({ isSecretChat }) {
   const ctx = useContext(UsersContext);
-  console.log(isSecretChat);
   const [isSecret, setIsSecret] = useState(isSecretChat);
   const [modalIsVisible, setModalIsVisible] = useState(false);
+  const lock = isSecret ? <CiLock /> : <CiUnlock />;
   const token = getToken();
+  const flag = getFlag();
 
   useEffect(() => {
     setIsSecret(isSecretChat);
@@ -31,7 +31,6 @@ export default function ChatInfo({ isSecretChat }) {
       }
     );
     const data = await response.json();
-    console.log(data);
     setIsSecret(data.isSecret);
   }
 
@@ -67,7 +66,7 @@ export default function ChatInfo({ isSecretChat }) {
         <p className={classes.name}>{ctx.activeUser.username}</p>
       </div>
       <div className={classes.iconLock} onClick={setIsSecretHandler}>
-        {isSecret ? <CiLock /> : <CiUnlock />}
+        {!flag && lock}
       </div>
       {modalIsVisible ? (
         <Modal>

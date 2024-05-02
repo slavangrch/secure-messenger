@@ -107,7 +107,6 @@ exports.editUser = async (req, res, next) => {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
-    console.log(error);
     next(error);
   }
 };
@@ -121,7 +120,6 @@ exports.getUserInfo = async (req, res, next) => {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
-    console.log(error);
     next(error);
   }
 };
@@ -141,13 +139,13 @@ exports.setChatIsSecret = async (req, res, next) => {
     }
     chat.isSecret = isSecret;
     const result = await chat.save();
-    // console.log(result);
+
     res.status(200).json({ isSecret: result.isSecret });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
-    console.log(error);
+    // console.log(error);
     next(error);
   }
 };

@@ -23,10 +23,6 @@
     flex-direction: column;
 }
 
-/* .name {
-
-} */
-
 .message {
     background-color: var(--color-ligth-green);
     padding: 8px 20px;

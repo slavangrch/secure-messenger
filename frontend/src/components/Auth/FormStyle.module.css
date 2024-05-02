@@ -14,7 +14,7 @@ h1 {
 
 .backendError {
     margin: 10px auto;
-    color: rgb(168, 67, 67);
+    color: var(--color-error);
 }
 
 .inputField {
@@ -32,7 +32,7 @@ h1 {
 }
 
 .inputField input.invalid {
-    border: 1px solid rgb(168, 67, 67);
+    border: 1px solid var(--color-error);
 }
 
 .btn {

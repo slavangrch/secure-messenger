@@ -1,5 +1,4 @@
 const Chat = require('../models/chat');
-// const User = require('../models/user');
 const Message = require('../models/message');
 const { getSocketId } = require('../socket/socket');
 const io = require('../socket/socketHelper');
@@ -9,14 +8,6 @@ exports.sendMessage = async (req, res, next) => {
     const receiverId = req.params.id;
     const senderId = req.userId;
     const message = req.body.message;
-
-    // const receiver = await User.findById(receiverId);
-    // // console.log(receiver);
-    // const receiverPublicKey = receiver.publicKey;
-    // const encryptedMessage = await encryptMessage(
-    //   message,
-    //   JSON.parse(receiverPublicKey)
-    // );
 
     let chat = await Chat.findOne({
       members: { $all: [senderId, receiverId] },
@@ -34,7 +25,6 @@ exports.sendMessage = async (req, res, next) => {
       receiverId,
       message,
     });
-    // console.log(newMessage);
 
     const result = await newMessage.save();
 

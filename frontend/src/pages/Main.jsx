@@ -7,7 +7,7 @@ import {
 } from '../utils/localStorageManipulation';
 import { UsersContext } from '../store/users-context';
 import { redirect, useLoaderData } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SettingsBar from '../components/SettingsBar/SettingsBar';
 import SocketContextProvider from '../store/socket-context';
 

@@ -1,4 +1,3 @@
-import { BsSlashSquare } from 'react-icons/bs';
 import classes from './FormStyle.module.css';
 import { Link, Form, useActionData, useNavigation } from 'react-router-dom';
 export default function LoginForm() {

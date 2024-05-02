@@ -6,7 +6,7 @@ import {
   getPublicKey,
   storeData,
 } from '../utils/localStorageManipulation';
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 import { generateKeyPair } from '../security/keyPairGeneration';
 
 // import * as openpgp from 'openpgp';
@@ -46,12 +46,6 @@ export async function action({ request }) {
     console.log(error);
   }
 
-  // submitData.publicKey = publicKeyJwk;
-  // console.log(submitData);
-  // console.log({
-  //   submitData,
-  //   publicKeyJwk: JSON.stringify(publicKeyJwk),
-  // });
   const response = await fetch('http://localhost:3000/auth/login', {
     method: request.method,
     headers: { 'Content-Type': 'application/json' },
@@ -62,17 +56,16 @@ export async function action({ request }) {
   });
 
   if (!response.ok) {
-    console.log(response);
-    // throw json({ message: response.message }, { status: 500 });
     return response;
   }
 
   const resultData = await response.json();
-  const { userId, token } = resultData;
+  const { userId, token, isFake } = resultData;
 
   storeData(userId, token);
   localStorage.setItem('privateKey', JSON.stringify(privateKeyJwk));
   localStorage.setItem('publicKey', JSON.stringify(publicKeyJwk));
+  localStorage.setItem('flag', isFake);
   const expiration = new Date();
   expiration.setTime(expiration.getTime() + 7 * 24 * 60 * 60 * 1000);
   localStorage.setItem('tokenExpiration', expiration.toISOString());

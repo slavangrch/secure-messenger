@@ -9,9 +9,9 @@ export default function InputMessage({ onSend, sharedKey }) {
   const token = getToken();
   const [message, setMessage] = useState('');
   const buttonIsDisabled = !ctx.activeUser._id || message.trim().length === 0;
+
   async function sendMessageHandler() {
     const encryptedMessage = await encryptMessage(message, sharedKey);
-    // console.log(encryptedMessage);
     const response = await fetch(
       `http://localhost:3000/message/send/${ctx.activeUser._id}`,
       {
@@ -24,11 +24,10 @@ export default function InputMessage({ onSend, sharedKey }) {
       }
     );
     const answer = await response.json();
-    console.log(answer);
-    console.log(message);
-    onSend({ ...answer.newMessage, message: message }); //, message: message
+    onSend({ ...answer.newMessage, message: message });
     setMessage('');
   }
+
   return (
     <>
       <div className={classes.wrapper}>
