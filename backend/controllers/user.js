@@ -47,7 +47,7 @@ exports.getEditUser = async (req, res, next) => {
 exports.editUser = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const imageUrl = req.file?.path || '';
+    const imagePath = req.file?.path || '';
     const username = req.body.username;
     const oldPassword = req.body['old-password'];
     const newPassword = req.body['new-password'];
@@ -61,11 +61,11 @@ exports.editUser = async (req, res, next) => {
     } else if (username && username.length >= 3) {
       user.username = username;
     }
-    if (imageUrl) {
-      if (user.imageUrl) {
-        clearImage(user.imageUrl);
+    if (imagePath) {
+      if (user.imagePath) {
+        clearImage(user.imagePath);
       }
-      user.imageUrl = imageUrl;
+      user.imagePath = imagePath;
     }
     if (oldPassword) {
       const passwordIsEqual = await bcrypt.compare(oldPassword, user.password);
@@ -145,7 +145,6 @@ exports.setChatIsSecret = async (req, res, next) => {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
-    // console.log(error);
     next(error);
   }
 };

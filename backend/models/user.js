@@ -18,7 +18,7 @@ const userSchema = new Schema({
   publicKey: {
     type: String,
   },
-  imageUrl: {
+  imagePath: {
     type: String,
     default: '',
   },

@@ -1,21 +1,21 @@
 export async function generateKeyPair() {
-  const keyPair = await window.crypto.subtle.generateKey(
+  const keys = await window.crypto.subtle.generateKey(
     {
       name: 'ECDH',
-      namedCurve: 'P-256',
+      namedCurve: 'P-384',
     },
     true,
-    ['deriveKey', 'deriveBits']
+    ['deriveKey']
   );
 
   const publicKeyJwk = await window.crypto.subtle.exportKey(
     'jwk',
-    keyPair.publicKey
+    keys.publicKey
   );
 
   const privateKeyJwk = await window.crypto.subtle.exportKey(
     'jwk',
-    keyPair.privateKey
+    keys.privateKey
   );
 
   return { publicKeyJwk, privateKeyJwk };

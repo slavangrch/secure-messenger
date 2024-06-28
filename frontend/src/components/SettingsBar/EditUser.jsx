@@ -17,8 +17,8 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
     setImage(e.target.files[0]);
   };
 
-  const currentUserPic = userInfo.imageUrl
-    ? `http://localhost:3000/${userInfo.imageUrl}`
+  const currentUserPic = userInfo.imagePath
+    ? `http://localhost:3000/${userInfo.imagePath}`
     : ProfileImage;
 
   async function editUserHandler(event) {
@@ -38,7 +38,7 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
       return error;
     }
 
-    const resData = await response.json();
+    await response.json();
     hideEditModal();
   }
   return (
@@ -94,11 +94,11 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
         </div>
         <div className={classes.inputField}>
           <label htmlFor="old-password">Old password</label>
-          <input type="text" name="old-password" id="old-password" />
+          <input type="password" name="old-password" id="old-password" />
         </div>
         <div className={classes.inputField}>
           <label htmlFor="new-password">New password</label>
-          <input type="text" name="new-password" id="new-password" />
+          <input type="password" name="new-password" id="new-password" />
         </div>
         {!flag && (
           <div className={classes.inputField}>
@@ -114,10 +114,11 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
                 account. Requiring a password adds an extra level of security,
                 ensuring that only trusted individuals can access sensitive
                 information. After entering the fake password during login, all
-                secret chats will be deleted. Be careful during login!
+                messages in secret chats will be deleted. Be careful during
+                login!
               </div>
             )}
-            <input type="text" name="fake-password" id="fake-password" />
+            <input type="password" name="fake-password" id="fake-password" />
           </div>
         )}
         <div className={classes.actionBtn}>

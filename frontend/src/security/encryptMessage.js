@@ -1,17 +1,14 @@
-export async function encryptMessage(text, derivedKey) {
-  const encodedText = new TextEncoder().encode(text);
-
-  const encryptedData = await window.crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv: new TextEncoder().encode('Initialization Vector') },
-    derivedKey,
-    encodedText
+export async function encryptMessage(message, sharedKey) {
+  const encodedMessage = new TextEncoder().encode(message);
+  const encryptedMessage = await window.crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv: new Uint8Array(13) },
+    sharedKey,
+    encodedMessage
   );
 
-  const uintArray = new Uint8Array(encryptedData);
+  const encryptedBytes = new Uint8Array(encryptedMessage);
+  const encryptedText = String.fromCharCode.apply(null, encryptedBytes);
+  const encryptedBase64 = btoa(encryptedText);
 
-  const string = String.fromCharCode.apply(null, uintArray);
-
-  const base64Data = btoa(string);
-
-  return base64Data;
+  return encryptedBase64;
 }

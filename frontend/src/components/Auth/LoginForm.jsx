@@ -22,7 +22,7 @@ export default function LoginForm() {
       <div className={classes.inputField}>
         <label htmlFor="password">Password</label>
         <input
-          type="text"
+          type="password"
           name="password"
           id="password"
           className={data && !data.passwordIsValid ? classes.invalid : ''}

@@ -33,7 +33,7 @@ export default function SignupForm() {
       <div className={classes.inputField}>
         <label htmlFor="password">Password</label>
         <input
-          type="text"
+          type="password"
           name="password"
           id="password"
           className={data && !data.passwordIsValid ? classes.invalid : ''}
@@ -42,7 +42,7 @@ export default function SignupForm() {
       <div className={classes.inputField}>
         <label htmlFor="confirmed-password">Confirm password</label>
         <input
-          type="text"
+          type="password"
           name="confirmed-password"
           id="confirm-password"
           className={data && !data.passwordIsValid ? classes.invalid : ''}

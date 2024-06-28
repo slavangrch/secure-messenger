@@ -24,8 +24,8 @@ export default function UserPic() {
   return (
     <img
       src={
-        userInfo && userInfo.imageUrl
-          ? `http://localhost:3000/${userInfo.imageUrl}`
+        userInfo && userInfo.imagePath
+          ? `http://localhost:3000/${userInfo.imagePath}`
           : ProfileImage
       }
       className={classes.userPic}

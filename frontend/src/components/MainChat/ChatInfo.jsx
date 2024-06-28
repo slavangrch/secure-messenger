@@ -57,8 +57,8 @@ export default function ChatInfo({ isSecretChat }) {
       <div className={classes.chatInfoWrapper}>
         <img
           src={
-            ctx.activeUser.imageUrl
-              ? `http://localhost:3000/${ctx.activeUser.imageUrl}`
+            ctx.activeUser.imagePath
+              ? `http://localhost:3000/${ctx.activeUser.imagePath}`
               : ProfileImage
           }
           alt=""
@@ -75,8 +75,8 @@ export default function ChatInfo({ isSecretChat }) {
             <p>Are you sure you want to make this chat secret?</p>
             <p>
               By making this chat secret, it will not be accessible with a fake
-              password. If you enter the fake password during login, this chat
-              will be deleted.
+              password. If you enter the fake password during login, all
+              messages in this chat will be deleted.
             </p>
             <div className={classes.actionButtons}>
               <button onClick={onClose}>Cancel</button>

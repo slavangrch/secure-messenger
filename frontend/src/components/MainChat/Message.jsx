@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import ProfileImage from '../../images/profile-image.png';
 import classes from './Message.module.css';
 import { UsersContext } from '../../store/users-context';
@@ -9,11 +9,11 @@ export default function Message({ message, userInfo }) {
   const receiver = ctx.activeUser;
   const time = formatTime(message.createdAt);
   const messageFromOwner = message.receiverId === receiver._id;
-  const receiverPic = receiver.imageUrl
-    ? `http://localhost:3000/${receiver.imageUrl}`
+  const receiverPic = receiver.imagePath
+    ? `http://localhost:3000/${receiver.imagePath}`
     : ProfileImage;
-  const senderPic = userInfo?.imageUrl
-    ? `http://localhost:3000/${userInfo.imageUrl}`
+  const senderPic = userInfo?.imagePath
+    ? `http://localhost:3000/${userInfo.imagePath}`
     : ProfileImage;
 
   return (

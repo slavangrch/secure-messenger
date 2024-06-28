@@ -8,8 +8,9 @@
     margin: 0 auto;
 }
 
-.messageWrapper img{
-    width: 35px;
+.messageWrapper img {
+    width: 100%;
+    max-width: 35px;
     height: 35px;
     border-radius: 50%;
     margin-left: 10px;
@@ -28,7 +29,7 @@
     padding: 8px 20px;
     border-radius: 12px;
     border-top-left-radius: 0;
-    max-width: 400px;
+    max-width: 410px;
     overflow-wrap: anywhere;
     word-break: break-all;
     line-height: 150%;

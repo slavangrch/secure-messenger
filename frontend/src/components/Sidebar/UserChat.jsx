@@ -17,8 +17,8 @@ export default function UserChat({ user }) {
       <div className={classes.imageContainer}>
         <img
           src={
-            user.imageUrl
-              ? `http://localhost:3000/${user.imageUrl}`
+            user.imagePath
+              ? `http://localhost:3000/${user.imagePath}`
               : ProfileImage
           }
           alt=""

@@ -77,6 +77,9 @@ export default function MainChat() {
           `http://localhost:3000/message/${ctx.activeUser._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
+        // if (!response.ok) {
+        //   console.log('no messages found');
+        // }
         const messages = await response.json();
         const isSecret = messages.isSecret;
         setIsSecret(isSecret);
@@ -111,12 +114,19 @@ export default function MainChat() {
             message.message,
             sharedKey
           );
-          setMessages((prevMessagges) => {
-            return [
-              ...prevMessagges,
+          setMessages((prevMessages) => {
+            const newMessages = [
+              ...(prevMessages || []),
               { ...message, message: decryptedMessage },
             ];
+            return newMessages;
           });
+          // setMessages((prevMessagges) => {
+          //   return [
+          //     ...prevMessagges,
+          //     { ...message, message: decryptedMessage },
+          //   ];
+          // });
         }
       });
     }
@@ -130,8 +140,12 @@ export default function MainChat() {
   }, [messages, ctx.activeUser]);
 
   function addMessage(message) {
-    setMessages((prevMessagges) => {
-      return [...(prevMessagges || null), message];
+    setMessages((prevMessages) => {
+      if (Array.isArray(prevMessages)) {
+        return [...prevMessages, message];
+      } else {
+        return [message];
+      }
     });
   }
 

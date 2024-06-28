@@ -9,9 +9,6 @@ import {
 import { redirect } from 'react-router-dom';
 import { generateKeyPair } from '../security/keyPairGeneration';
 
-// import * as openpgp from 'openpgp';
-// import { generateKeyPair } from '../security/keyPairGeneration';
-
 export default function LoginPage() {
   return (
     <div className={classes.authPage}>

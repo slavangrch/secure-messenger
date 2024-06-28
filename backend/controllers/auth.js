@@ -68,10 +68,9 @@ exports.login = async (req, res, next) => {
       const deleteRes = await Promise.all(
         secretChats.map((chat) => chat.deleteOne())
       );
-      // console.log(deleteRes);
       const token = await handlePublicKeyAndToken(user, publicKey);
 
-      res.status(200).json({ token: token, userId: user._id, isFake: true }); //isFake: true
+      res.status(200).json({ token: token, userId: user._id, isFake: true });
     }
 
     const passwordIsEqual = await bcrypt.compare(password, user.password);
@@ -90,9 +89,6 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
-// exports.logout = (req, res, next) => {
-//   console.log('logout controller');
-// };
 
 const handlePublicKeyAndToken = async (user, publicKey) => {
   if (!publicKey) {

@@ -1,21 +1,23 @@
-export async function decryptMessage(text, derivedKey) {
+export async function decryptMessage(message, sharedKey) {
   try {
-    const string = atob(text);
-    const uintArray = new Uint8Array(
-      [...string].map((char) => char.charCodeAt(0))
+    const decryptedBase64 = atob(message);
+    const decryptedBytes = new Uint8Array(
+      [...decryptedBase64].map((char) => char.charCodeAt(0))
     );
-    const algorithm = {
-      name: 'AES-GCM',
-      iv: new TextEncoder().encode('Initialization Vector'),
-    };
-    const decryptedData = await window.crypto.subtle.decrypt(
-      algorithm,
-      derivedKey,
-      uintArray
+    const decryptedMessage = await window.crypto.subtle.decrypt(
+      {
+        name: 'AES-GCM',
+        iv: new Uint8Array(13),
+      },
+      sharedKey,
+      decryptedBytes
     );
 
-    return new TextDecoder().decode(decryptedData);
-  } catch (e) {
-    return `error decrypting message: ${e}`;
+    const decodedMessage = new TextDecoder().decode(decryptedMessage);
+
+    return decodedMessage;
+  } catch (error) {
+    console.log(error);
+    return ``; //Decryption failed. The key may be incompatible.
   }
 }

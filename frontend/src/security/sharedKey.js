@@ -4,7 +4,7 @@ export async function generateSharedKey(publicKeyJwk, privateKeyJwk) {
     publicKeyJwk,
     {
       name: 'ECDH',
-      namedCurve: 'P-256',
+      namedCurve: 'P-384',
     },
     true,
     []
@@ -15,16 +15,16 @@ export async function generateSharedKey(publicKeyJwk, privateKeyJwk) {
     privateKeyJwk,
     {
       name: 'ECDH',
-      namedCurve: 'P-256',
+      namedCurve: 'P-384',
     },
     true,
-    ['deriveKey', 'deriveBits']
+    ['deriveKey']
   );
 
   return await window.crypto.subtle.deriveKey(
     { name: 'ECDH', public: publicKey },
     privateKey,
-    { name: 'AES-GCM', length: 256 },
+    { name: 'AES-GCM', length: 128 },
     true,
     ['encrypt', 'decrypt']
   );
