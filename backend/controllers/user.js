@@ -101,7 +101,6 @@ exports.editUser = async (req, res, next) => {
       user.fakePassword = hashedFakePassword;
     }
     const result = await user.save();
-    // console.log(result);
     res.status(200).json({ result });
   } catch (error) {
     if (!error.statusCode) {

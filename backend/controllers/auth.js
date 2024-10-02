@@ -3,8 +3,7 @@ const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator/check');
 const jwt = require('jsonwebtoken');
 const Chat = require('../models/chat');
-const SECRET_KEY =
-  '5227c42b3c78f653868cfd1b525b2a8d6f28e32bb8e1813c54ccc703b58bb9f3';
+const SECRET_KEY = process.env.SECRET_KEY;
 
 exports.signup = async (req, res, next) => {
   try {

@@ -60,7 +60,6 @@ export default function EditUser({ onClose, userInfo, hideEditModal }) {
                 hidden
                 onChange={changeImageHandler}
               />
-              {/* <button onClick={deleteImageHandler}>Delete</button> */}
             </div>
           </div>
           <img

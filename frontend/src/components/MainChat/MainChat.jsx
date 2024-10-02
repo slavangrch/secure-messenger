@@ -121,12 +121,6 @@ export default function MainChat() {
             ];
             return newMessages;
           });
-          // setMessages((prevMessagges) => {
-          //   return [
-          //     ...prevMessagges,
-          //     { ...message, message: decryptedMessage },
-          //   ];
-          // });
         }
       });
     }

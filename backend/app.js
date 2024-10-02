@@ -1,5 +1,5 @@
-const DB_URL =
-  'mongodb+srv://slnegrich:hzzXOK8JOsz21brm@cluster0.vs37vsv.mongodb.net/messenger-db?retryWrites=true&w=majority&appName=Cluster0';
+require('dotenv').config({ path: '../.env' });
+const DB_URL = process.env.DB_URL;
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');

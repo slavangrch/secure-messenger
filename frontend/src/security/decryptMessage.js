@@ -18,6 +18,6 @@ export async function decryptMessage(message, sharedKey) {
     return decodedMessage;
   } catch (error) {
     console.log(error);
-    return ``; //Decryption failed. The key may be incompatible.
+    return `Decryption failed. The key may be incompatible.`; //
   }
 }
