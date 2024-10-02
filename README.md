@@ -39,7 +39,7 @@ To run the project locally, follow these steps:
    Create a .env file in the backend folder and add the following:
    ```bash
    SECRET_KEY=your_secret_key
-   MONGODB_URI=your_mongodb_connection_string
+   DB_URL=your_mongodb_connection_string
    ```
 5. Start the backend server:
    ```bash
